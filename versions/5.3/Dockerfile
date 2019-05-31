@@ -12,19 +12,20 @@ COPY files/ /
 
 ENV PHP_VERSION 5.3
 RUN set -ex && \
-	# chmod +x /entrypoint*.sh && \
-	# curl -f --output /tmp/cloudflare-ips-v4 --connect-timeout 30 https://www.cloudflare.com/ips-v4 2> /dev/null && \
-	# sleep 3 && \
-	# curl -f --output /tmp/cloudflare-ips-v6 --connect-timeout 30 https://www.cloudflare.com/ips-v6 2> /dev/null && \
-	# ls -lah /tmp/cloudflare* && \
-	# apt-get update -y && \
-	# apt-get install --no-install-recommends -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" \
-	# 	cron nginx memcached supervisor \
-	# 	# This provides: ps, top, uptime, pkill, watch, etc...
-	# 	# Reference: https://packages.ubuntu.com/xenial/amd64/procps/filelist
-	# 	procps && \
+	chmod +x /entrypoint*.sh && \
+	curl -f --output /tmp/cloudflare-ips-v4 --connect-timeout 30 https://www.cloudflare.com/ips-v4 2> /dev/null && \
+	sleep 3 && \
+	curl -f --output /tmp/cloudflare-ips-v6 --connect-timeout 30 https://www.cloudflare.com/ips-v6 2> /dev/null && \
+	ls -lah /tmp/cloudflare* && \
+	apt-get update -y && \
+	apt-get install --no-install-recommends -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" \
+		cron nginx memcached supervisor \
+		# This provides: ps, top, uptime, pkill, watch, etc...
+		# Reference: https://packages.ubuntu.com/xenial/amd64/procps/filelist
+		procps && \
+    imagemagick libmagickwand-dev && \
   docker-php-pecl-install imagick-3.1.2 && \
-  docker-php-pecl-install memcached && \
+  docker-php-pecl-install memcache && \
   docker-php-pecl-install opcache && \
 
 

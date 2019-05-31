@@ -22,7 +22,7 @@ RUN set -ex && \
 		cron nginx memcached supervisor \
 		# This provides: ps, top, uptime, pkill, watch, etc...
 		# Reference: https://packages.ubuntu.com/xenial/amd64/procps/filelist
-		procps && \
+		procps \
     imagemagick libmagickwand-dev && \
   docker-php-pecl-install imagick-3.1.2 && \
   docker-php-pecl-install memcache && \

@@ -1,6 +1,10 @@
 FROM php:{{ version }}-fpm
 LABEL maintainer="helder"
 
+
+COPY bin/* /usr/local/bin/
+RUN mkdir -p /usr/local/etc/php/disabled
+
 # Set noninteractive mode for apt-get
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -14,7 +18,7 @@ RUN set -ex && \
 	curl -f --output /tmp/cloudflare-ips-v6 --connect-timeout 30 https://www.cloudflare.com/ips-v6 2> /dev/null && \
 	ls -lah /tmp/cloudflare* && \
 	apt-get update -y && \
-	apt-get install -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" \
+	apt-get install --no-install-recommends -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" \
 		cron nginx memcached supervisor \
 		# This provides: ps, top, uptime, pkill, watch, etc...
 		# Reference: https://packages.ubuntu.com/xenial/amd64/procps/filelist
@@ -27,9 +31,6 @@ RUN set -ex && \
     docker-php-ext-install opcache \
   fi
 
-
-COPY bin/* /usr/local/bin/
-RUN mkdir -p /usr/local/etc/php/disabled
 
 # Install useful extensions
 RUN apt-install \

@@ -21,6 +21,7 @@ NGINX_REALIP_FROM=${NGINX_REALIP_FROM:=''}
 NGINX_REALIP_HEADER=${NGINX_REALIP_HEADER:='X-Forwarded-For'}
 
 
+CMD=${CMD:='startup'}
 SUPERVISOR_ENABLE=0
 
 if [ "$CRON_COMMANDS" != '' ]; then
@@ -121,7 +122,7 @@ fi
 # Correct broken stuff caused by hooks, inherited docker images
 chmod a+rwxt /tmp
 
-if [ "$1" = 'startup' ]; then
+if [ "$CMD" = 'startup' ]; then
 	if [ "$SUPERVISOR_ENABLE" -gt 0 ]; then
 		exec supervisord --nodaemon;
 	else

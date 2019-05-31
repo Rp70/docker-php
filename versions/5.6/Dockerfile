@@ -23,13 +23,9 @@ RUN set -ex && \
 	# 	# This provides: ps, top, uptime, pkill, watch, etc...
 	# 	# Reference: https://packages.ubuntu.com/xenial/amd64/procps/filelist
 	# 	procps && \
-  ( \
-    if [[ $PHP_VERSION == 5.* ]]; then \
-      docker-php-pecl-install imagick-3.1.2 opcache memcache; \
-    else \
-      docker-php-ext-install opcache memcached; \
-    fi \
-  )
+  docker-php-pecl-install imagick && \
+  docker-php-pecl-install memcached && \
+  docker-php-pecl-install opcache && \
 
 
 # Install useful extensions

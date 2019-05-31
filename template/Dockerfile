@@ -86,7 +86,7 @@ ENV COMPOSER_VERSION 1.7.2
 ENV COMPOSER_HOME /var/www/.composer
 ENV PATH vendor/bin:$COMPOSER_HOME/vendor/bin:$PATH
 
-RUN curl -sS https://getcomposer.org/installer | php -- \
+RUN curl -sS https://getcomposer.org/installer | php -n -- \
       --install-dir=/usr/local/bin \
       --filename=composer \
       --version=${COMPOSER_VERSION}

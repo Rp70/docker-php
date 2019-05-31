@@ -35,6 +35,7 @@ echo "Fix PHP 5.3"
       -e 's/\(ENV XDEBUG_VERSION\) .*/\1 2.2.7/g' \
       -e 's/\(docker-php-pecl-install imagick\)/\1-3.1.2/g' \
       -e 's/\(docker-php-pecl-install memcached\)/docker-php-pecl-install memcache/g' \
+      -e 's/\(docker-php-ext-install opcache\)/docker-php-pecl-install ZendOpcache/g' \
     versions/5.3/Dockerfile
   cp fpm-env.sh versions/5.3/init.d/
 )

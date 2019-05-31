@@ -26,7 +26,8 @@ RUN set -ex && \
     imagemagick libmagickwand-dev && \
   docker-php-pecl-install imagick-3.1.2 && \
   docker-php-pecl-install memcache && \
-  docker-php-pecl-install opcache && \
+  docker-php-pecl-install ZendOpcache && \
+  true
 
 
 # Install useful extensions

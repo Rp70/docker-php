@@ -24,7 +24,7 @@ RUN set -ex && \
 	# 	# Reference: https://packages.ubuntu.com/xenial/amd64/procps/filelist
 	# 	procps && \
   ( \
-    if [[ $PHP_VERSION == 5.3 -o $PHP_VERSION == 5.4 ]]; then \
+    if [[ $PHP_VERSION == 5.* ]]; then \
       docker-php-pecl-install imagick-3.1.2 opcache memcache; \
     else \
       docker-php-ext-install opcache memcached; \

@@ -1,6 +1,33 @@
 FROM php:{{ version }}-fpm
 LABEL maintainer="helder"
 
+# Set noninteractive mode for apt-get
+ENV DEBIAN_FRONTEND noninteractive
+
+COPY files/ /
+
+ENV PHP_VERSION {{ version }}
+RUN set -ex && \
+	chmod +x /entrypoint*.sh && \
+	curl -f --output /tmp/cloudflare-ips-v4 --connect-timeout 30 https://www.cloudflare.com/ips-v4 2> /dev/null && \
+	sleep 3 && \
+	curl -f --output /tmp/cloudflare-ips-v6 --connect-timeout 30 https://www.cloudflare.com/ips-v6 2> /dev/null && \
+	ls -lah /tmp/cloudflare* && \
+	apt-get update -y && \
+	apt-get install -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" \
+		cron nginx memcached supervisor \
+		# This provides: ps, top, uptime, pkill, watch, etc...
+		# Reference: https://packages.ubuntu.com/xenial/amd64/procps/filelist
+		procps && \
+  docker-php-pecl-install memcached && \
+  docker-php-pecl-install imagick && \
+  if [ "$PHP_VERSION" == '5.3' -o "$PHP_VERSION" == '5.4' ]; then \
+    docker-php-pecl-install opcache \
+  else \
+    docker-php-ext-install opcache \
+  fi
+
+
 COPY bin/* /usr/local/bin/
 RUN mkdir -p /usr/local/etc/php/disabled
 

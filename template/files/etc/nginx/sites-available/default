@@ -1,0 +1,9 @@
+server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+	server_name localhost _;
+
+	error_page 403 404 500 502 503 504 $scheme://google.com;
+
+	location / { deny all; }
+}

@@ -41,7 +41,7 @@ echo "Fix PHP 5.4"
 (
   set -x;
   sed -i -e 's/\(ENV XDEBUG_VERSION\) .*/\1 2.4.1/g' \
-    -e 's|/usr/local/etc/php-fpm.d/docker.conf|/usr/local/etc/php-fpm.d/php-fpm.conf|g' \
-    -e 's|/usr/local/etc/php-fpm.d/www.conf|/usr/local/etc/php-fpm.d/php-fpm.conf|g' \
+    -e 's|/usr/local/etc/php-fpm.d/docker.conf|/usr/local/etc/php-fpm.conf|g' \
+    -e 's|/usr/local/etc/php-fpm.d/www.conf|/usr/local/etc/php-fpm.conf|g' \
     versions/5.4/Dockerfile
 )

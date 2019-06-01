@@ -40,6 +40,6 @@ echo "Fix PHP 5.3"
 echo "Fix PHP 5.4"
 (
   set -x;
-  sed -i -e 's/\(ENV XDEBUG_VERSION\) .*/\1 2.1.2/g' \
+  sed -i -e 's/\(ENV XDEBUG_VERSION\) .*/\1 2.4.1/g' \
     versions/5.4/Dockerfile
 )

@@ -111,9 +111,9 @@ VOLUME $COMPOSER_HOME/cache
 # Add configs
 COPY etc/*.ini /usr/local/etc/php/
 RUN cd /usr/local/etc/php && cp prod.ini conf.d/environment.ini
-RUN sed -i -e '/^access.log/ s/^/;/' /usr/local/etc/php-fpm.d/docker.conf && \
-    sed -i -e '/^listen =/ s/^/;/' /usr/local/etc/php-fpm.d/www.conf && \
-    sed -i -e "s/^pm = dynamic/pm = ondemand/" /usr/local/etc/php-fpm.d/www.conf
+RUN sed -i -e '/^access.log/ s/^/;/' /usr/local/etc/php-fpm.d/php-fpm.conf && \
+    sed -i -e '/^listen =/ s/^/;/' /usr/local/etc/php-fpm.d/php-fpm.conf && \
+    sed -i -e "s/^pm = dynamic/pm = ondemand/" /usr/local/etc/php-fpm.d/php-fpm.conf
 
 
 # Add entrypoint

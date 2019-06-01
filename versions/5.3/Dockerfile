@@ -12,12 +12,13 @@ COPY files/ /
 
 ENV PHP_MINOR_VERSION 5.3
 RUN set -ex && \
-if [ "$PHP_MINOR_VERSION" = "5.4" ]; then \
-	echo ok; \
-else \
-	echo no; \
-fi; \
-exit; \
+  . /etc/os-release && \
+  # If OS is Debian 8 (Jessie), update sources.list
+  if [ "$ID" = 'debian' -a "$VERSION" = '8' ]; then \
+    echo 'deb http://deb.debian.org/debian jessie main' > /etc/apt/sources.list; \
+    echo 'deb http://security.debian.org/debian-security jessie/updates main' >> /etc/apt/sources.list; \
+  fi; \
+  exit; \
 	chmod +x /entrypoint*.sh && \
 	curl -f --output /tmp/cloudflare-ips-v4 --connect-timeout 30 https://www.cloudflare.com/ips-v4 2> /dev/null && \
 	sleep 3 && \

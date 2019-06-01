@@ -1,5 +1,6 @@
 FROM php:7.0-fpm
-LABEL maintainer="helder"
+LABEL original-maintainer="helder"
+LABEL maintainer="Rp70"
 
 
 COPY bin/* /usr/local/bin/
@@ -31,13 +32,15 @@ RUN set -ex && \
 		procps \
     imagemagick libmagickwand-dev && \
   docker-php-pecl-install imagick && \
-  if [ "$PHP_MINOR_VERSION" = '5.3' -o "$PHP_MINOR_VERSION" = '5.4' ]; then \
-    docker-php-pecl-install memcache; \
-    docker-php-pecl-install ZendOpcache; \
-  else \
-    docker-php-pecl-install memcached; \
-    docker-php-ext-install opcache; \
-  fi; \
+  docker-php-pecl-install memcached && \
+  docker-php-ext-install opcache && \
+  # if [ "$PHP_MINOR_VERSION" = '5.3' -o "$PHP_MINOR_VERSION" = '5.4' ]; then \
+  #   docker-php-pecl-install memcache; \
+  #   docker-php-pecl-install ZendOpcache; \
+  # else \
+  #   docker-php-pecl-install memcached; \
+  #   docker-php-ext-install opcache; \
+  # fi; \
   true
 
 
@@ -113,7 +116,7 @@ RUN sed -i -e '/^access.log/ s/^/;/' /usr/local/etc/php-fpm.d/docker.conf && \
     sed -i -e '/^listen =/ s/^/;/' /usr/local/etc/php-fpm.d/www.conf && \
     sed -i -e "s/^pm = dynamic/pm = ondemand/" /usr/local/etc/php-fpm.d/www.conf
 
-RUN true
+RUN true 1
 
 # Add entrypoint
 COPY init.d /docker-entrypoint-init.d/

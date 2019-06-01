@@ -118,7 +118,7 @@ RUN sed -i -e '/^access.log/ s/^/;/' /usr/local/etc/php-fpm.d/docker.conf && \
     sed -i -e '/^listen =/ s/^/;/' /usr/local/etc/php-fpm.d/www.conf && \
     sed -i -e "s/^pm = dynamic/pm = ondemand/" /usr/local/etc/php-fpm.d/www.conf
 
-RUN true 1
+RUN true 11
 
 # Add entrypoint
 COPY init.d /docker-entrypoint-init.d/

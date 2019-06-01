@@ -31,8 +31,13 @@ RUN set -ex && \
 		procps \
     imagemagick libmagickwand-dev && \
   docker-php-pecl-install imagick && \
-  docker-php-pecl-install memcached && \
-  docker-php-ext-install opcache && \
+  if [ "$PHP_MINOR_VERSION" = '5.3' -o "$PHP_MINOR_VERSION" = '5.4' ]; then \
+    docker-php-pecl-install memcache; \
+    docker-php-pecl-install ZendOpcache; \
+  else \
+    docker-php-pecl-install memcached; \
+    docker-php-ext-install opcache; \
+  fi; \
   true
 
 

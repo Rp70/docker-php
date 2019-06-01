@@ -31,7 +31,7 @@ RUN set -ex && \
 		# Reference: https://packages.ubuntu.com/xenial/amd64/procps/filelist
 		procps \
     imagemagick libmagickwand-dev && \
-  docker-php-pecl-install imagick && \
+  docker-php-pecl-install imagick-3.3.0 && \
   docker-php-pecl-install memcache && \
   docker-php-pecl-install ZendOpcache && \
   # if [ "$PHP_MINOR_VERSION" = '5.3' -o "$PHP_MINOR_VERSION" = '5.4' ]; then \

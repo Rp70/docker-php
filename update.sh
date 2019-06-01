@@ -33,6 +33,7 @@ echo "Fix PHP 5.3"
         \  && mkdir /usr/include/freetype2/freetype \\ \
         \  && ln -s /usr/include/freetype2/freetype.h /usr/include/freetype2/freetype/freetype.h \\' \
       -e 's/\(ENV XDEBUG_VERSION\) .*/\1 2.2.7/g' \
+      -e 's/docker-php-pecl-install imagick/docker-php-pecl-install imagick-3.3.0/g' \
       -e 's/docker-php-pecl-install memcached/docker-php-pecl-install memcache/g' \
       -e 's/docker-php-ext-install opcache/docker-php-pecl-install ZendOpcache/g' \
     versions/5.3/Dockerfile

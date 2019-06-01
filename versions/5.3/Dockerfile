@@ -17,7 +17,7 @@ RUN set -ex && \
   if [ "$ID" = 'debian' -a "$VERSION_ID" = '8' ]; then \
     echo 'deb http://deb.debian.org/debian jessie main' > /etc/apt/sources.list; \
     echo 'deb http://security.debian.org/debian-security jessie/updates main' >> /etc/apt/sources.list; \
-  fi \
+  fi; \
 	chmod +x /entrypoint*.sh && \
 	curl -f --output /tmp/cloudflare-ips-v4 --connect-timeout 30 https://www.cloudflare.com/ips-v4 2> /dev/null && \
 	sleep 3 && \

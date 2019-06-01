@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-CONF=/usr/local/etc/php-fpm.d/zz-docker.conf
+CONF=/usr/local/etc/php-fpm.conf
 
 # Enable listen override
 if [ "$LISTEN_ADDRESS" ]; then

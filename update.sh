@@ -48,4 +48,6 @@ echo "Fix PHP 5.4"
     -e 's/docker-php-pecl-install memcached/docker-php-pecl-install memcache/g' \
     -e 's/docker-php-ext-install opcache/docker-php-pecl-install ZendOpcache/g' \
     versions/5.4/Dockerfile
+  sed -i -e 's|/usr/local/etc/php-fpm.d/zz-docker.conf|/usr/local/etc/php-fpm.conf|g' \
+    versions/5.4/init.d/listen.sh
 )

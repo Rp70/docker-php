@@ -119,5 +119,6 @@ RUN sed -i -e '/^access.log/ s/^/;/' /usr/local/etc/php-fpm.d/docker.conf && \
 # Add entrypoint
 COPY init.d /docker-entrypoint-init.d/
 COPY docker-entrypoint.sh /
+RUN chmod +x /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["php-fpm"]

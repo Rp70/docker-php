@@ -10,8 +10,14 @@ ENV DEBIAN_FRONTEND noninteractive
 
 COPY files/ /
 
-ENV PHP_VERSION 7.1
+#ENV PHP_VERSION 7.1
 RUN set -ex && \
+if [[ $PHP_VERSION == 5.4* ]]; then \
+	echo ok; \
+else \
+	echo no; \
+fi; \
+exit \
 	chmod +x /entrypoint*.sh && \
 	curl -f --output /tmp/cloudflare-ips-v4 --connect-timeout 30 https://www.cloudflare.com/ips-v4 2> /dev/null && \
 	sleep 3 && \

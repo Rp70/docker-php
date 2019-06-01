@@ -18,7 +18,7 @@ RUN set -ex && \
     echo 'deb http://deb.debian.org/debian jessie main' > /etc/apt/sources.list; \
     echo 'deb http://security.debian.org/debian-security jessie/updates main' >> /etc/apt/sources.list; \
   fi; \
-	chmod +x /entrypoint*.sh && \
+	chmod +x /entrypoint*.sh /usr/local/bin/apt-install /usr/local/bin/apt-purge /usr/local/bin/docker-php-pecl-install && \
 	curl -f --output /tmp/cloudflare-ips-v4 --connect-timeout 30 https://www.cloudflare.com/ips-v4 2> /dev/null && \
 	sleep 3 && \
 	curl -f --output /tmp/cloudflare-ips-v6 --connect-timeout 30 https://www.cloudflare.com/ips-v6 2> /dev/null && \

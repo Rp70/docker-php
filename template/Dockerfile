@@ -14,11 +14,10 @@ ENV PHP_MINOR_VERSION {{ version }}
 RUN set -ex && \
   . /etc/os-release && \
   # If OS is Debian 8 (Jessie), update sources.list
-  if [ "$ID" = 'debian' -a "$VERSION" = '8' ]; then \
+  if [ "$ID" = 'debian' -a "$VERSION_ID" = '8' ]; then \
     echo 'deb http://deb.debian.org/debian jessie main' > /etc/apt/sources.list; \
     echo 'deb http://security.debian.org/debian-security jessie/updates main' >> /etc/apt/sources.list; \
-  fi; \
-  exit; \
+  fi \
 	chmod +x /entrypoint*.sh && \
 	curl -f --output /tmp/cloudflare-ips-v4 --connect-timeout 30 https://www.cloudflare.com/ips-v4 2> /dev/null && \
 	sleep 3 && \

@@ -27,10 +27,11 @@ RUN set -ex && \
 	apt-get update -y && \
 	apt-get install --no-install-recommends -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" \
 		cron nginx memcached supervisor \
-		# This provides: ps, top, uptime, pkill, watch, etc...
+		# The package 'procps' provides: ps, top, uptime, pkill, watch, etc...
 		# Reference: https://packages.ubuntu.com/xenial/amd64/procps/filelist
 		procps \
     imagemagick libmagickwand-dev && \
+    libmemcached-dev && \
   # Disable 'open_basedir' directive so PECL and other PHP commands work properly.
   sed -i -e '/^open_basedir/ s/^/;/' /usr/local/etc/php/conf.d/zza_customs.ini && \
   docker-php-pecl-install imagick-3.3.0 && \

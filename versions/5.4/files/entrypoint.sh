@@ -44,20 +44,25 @@ if [ "$NGINX_ENABLE" = '' ]; then
 else
 	SUPERVISOR_ENABLE=$((SUPERVISOR_ENABLE+1))
 
-	NGINX_REPLACE=${NGINX_REPLACE:='NGINX_FASTCGI_PASS'}
-	NGINX_FASTCGI_PASS=${NGINX_FASTCGI_PASS:='127.0.0.1:9000'}
-	echo "Replacing variables in /etc/nginx"
-	SHELLFORMAT=''
-	for varname in $NGINX_REPLACE; do
-		SHELLFORMAT="\$$varname $SHELLFORMAT"
+	echo "Replacing environment variables in /etc/nginx"
+	SHELLFORMAT='';
+	for varname in `env | cut -d'='  -f 1`; do
+		SHELLFORMAT="\$$varname $SHELLFORMAT";
 	done
 	if [ "$SHELLFORMAT" != '' ]; then
 		SHELLFORMAT="'$SHELLFORMAT'"
 		for configfile in `find /etc/nginx -type f ! -path '*~'`; do
 			echo $configfile
-			content=`cat $configfile`
-			echo "$content" | envsubst "$SHELLFORMAT" > $configfile
+			# This will mess files with escaped chars.
+			# It will mess: return 200 'User-Agent: *\nDisallow: /';
+			#content=`cat $configfile`
+			#echo "$content" | envsubst "$SHELLFORMAT" > $configfile
+			
+			# Temp file is slow but won't mess files with escaped chars.
+			cp -f $configfile /tmp/envsubst.tmp
+			envsubst "$SHELLFORMAT" < /tmp/envsubst.tmp > $configfile
 		done
+		rm -f /tmp/envsubst.tmp
 	fi
 	echo
 

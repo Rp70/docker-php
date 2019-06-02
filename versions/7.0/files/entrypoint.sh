@@ -12,6 +12,8 @@ if [ -e /entrypoint-hook-start.sh ]; then
 	. /entrypoint-hook-start.sh
 fi
 
+
+ENVIRONMENT_REPLACE=${ENVIRONMENT_REPLACE:=''}
 CRON_ENABLE=${CRON_ENABLE:=''}
 CRON_COMMANDS=${CRON_COMMANDS:=''}
 MEMCACHED_ENABLE=${MEMCACHED_ENABLE:=''}
@@ -43,29 +45,8 @@ if [ "$NGINX_ENABLE" = '' ]; then
 	rm -f /etc/supervisor/conf.d/nginx.conf
 else
 	SUPERVISOR_ENABLE=$((SUPERVISOR_ENABLE+1))
-
-	echo "Replacing environment variables in /etc/nginx"
-	SHELLFORMAT='';
-	for varname in `env | cut -d'='  -f 1`; do
-		SHELLFORMAT="\$$varname $SHELLFORMAT";
-	done
-	if [ "$SHELLFORMAT" != '' ]; then
-		SHELLFORMAT="'$SHELLFORMAT'"
-		for configfile in `find /etc/nginx -type f ! -path '*~'`; do
-			echo $configfile
-			# This will mess files with escaped chars.
-			# It will mess: return 200 'User-Agent: *\nDisallow: /';
-			#content=`cat $configfile`
-			#echo "$content" | envsubst "$SHELLFORMAT" > $configfile
-			
-			# Temp file is slow but won't mess files with escaped chars.
-			cp -f $configfile /tmp/envsubst.tmp
-			envsubst "$SHELLFORMAT" < /tmp/envsubst.tmp > $configfile
-		done
-		rm -f /tmp/envsubst.tmp
-	fi
-	echo
-
+	ENVIRONMENT_REPLACE="$ENVIRONMENT_REPLACE /etc/nginx"
+	
 	#rm -rf /etc/nginx/sites-available/default
 	#sed -i 's/^user/daemon off;\nuser/g' /etc/nginx/nginx.conf
 	#sed -i 's/^user www-data;/user coin;/g' /etc/nginx/nginx.conf
@@ -112,6 +93,32 @@ else
 		echo "real_ip_header $NGINX_REALIP_HEADER;" >> $CONFFILE
 	fi
 	### / realip_module ###
+fi
+
+
+if [ "$ENVIRONMENT_REPLACE" != '' ]; then
+	SHELLFORMAT='';
+	for varname in `env | cut -d'='  -f 1`; do
+		SHELLFORMAT="\$$varname $SHELLFORMAT";
+	done
+	SHELLFORMAT="'$SHELLFORMAT'"
+	
+	for envfile in $ENVIRONMENT_REPLACE; do
+		echo "Replacing variables in $envfile"
+		for configfile in `find $envfile -type f ! -path '*~'`; do
+			echo $configfile
+			# This will mess files with escaped chars.
+			# It will mess: return 200 'User-Agent: *\nDisallow: /';
+			#content=`cat $configfile`
+			#echo "$content" | envsubst "$SHELLFORMAT" > $configfile
+			
+			# Temp file is slow but won't mess files with escaped chars.
+			cp -f $configfile /dev/shm/envsubst.tmp
+			envsubst "$SHELLFORMAT" < /dev/shm/envsubst.tmp > $configfile
+		done
+	done
+	
+	rm -f /dev/shm/envsubst.tmp
 fi
 
 mkdir -p /var/log/php-fpm

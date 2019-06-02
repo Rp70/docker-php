@@ -31,16 +31,11 @@ RUN set -ex && \
 		# Reference: https://packages.ubuntu.com/xenial/amd64/procps/filelist
 		procps \
     imagemagick libmagickwand-dev && \
+  # Disable 'open_basedir' directive so PECL and other PHP commands work properly.
+  sed -i -e '/^open_basedir/ s/^/;/' /usr/local/etc/php/conf.d/zza_customs.ini && \
   docker-php-pecl-install imagick && \
   docker-php-pecl-install memcached && \
   docker-php-ext-install opcache && \
-  # if [ "$PHP_MINOR_VERSION" = '5.3' -o "$PHP_MINOR_VERSION" = '5.4' ]; then \
-  #   docker-php-pecl-install memcache; \
-  #   docker-php-pecl-install ZendOpcache; \
-  # else \
-  #   docker-php-pecl-install memcached; \
-  #   docker-php-ext-install opcache; \
-  # fi; \
   true
 
 
@@ -100,7 +95,7 @@ ENV COMPOSER_VERSION 1.7.2
 ENV COMPOSER_HOME /var/www/.composer
 ENV PATH vendor/bin:$COMPOSER_HOME/vendor/bin:$PATH
 
-RUN curl -sS https://getcomposer.org/installer | php -n -- \
+RUN curl -sS https://getcomposer.org/installer | php -- \
       --install-dir=/usr/local/bin \
       --filename=composer \
       --version=${COMPOSER_VERSION}
@@ -123,6 +118,12 @@ RUN true 11
 # Add entrypoint
 COPY init.d /docker-entrypoint-init.d/
 COPY docker-entrypoint.sh /
-RUN chmod +x /docker-entrypoint.sh
+
+RUN set -ex && \
+  chmod +x /docker-entrypoint.sh && \
+  # Restore 'open_basedir' directive
+  sed -i -e '/^;open_basedir/ s/^;//' /usr/local/etc/php/conf.d/zza_customs.ini
+
+
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["php-fpm"]

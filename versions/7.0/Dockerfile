@@ -26,7 +26,8 @@ RUN set -ex && \
 	ls -lah /tmp/cloudflare* && \
 	apt-get update -y && \
 	apt-get install --no-install-recommends -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" \
-		cron nginx memcached supervisor \
+		gettext-base \
+    cron nginx memcached supervisor \
 		# The package 'procps' provides: ps, top, uptime, pkill, watch, etc...
 		# Reference: https://packages.ubuntu.com/xenial/amd64/procps/filelist
 		procps \

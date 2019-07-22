@@ -142,3 +142,7 @@ The default timezone is set with `TIMEZONE=Atlantic/Azores`. Change it with an e
 #### XDebug
 
 The XDebug extension is installed but disabled by default. To enable, set the enviroment variable `USE_XDEBUG=true`.
+
+#### Tweaks
+
+PHP-FPM: pm.max_children set with `PHPFPM_MAX_CHILDREN=5`. You can increase with with an environment variable.

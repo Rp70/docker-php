@@ -22,6 +22,7 @@ NGINX_ENABLE=${NGINX_ENABLE:=''}
 NGINX_PROCESSES=${NGINX_PROCESSES:='2'}
 NGINX_REALIP_FROM=${NGINX_REALIP_FROM:=''}
 NGINX_REALIP_HEADER=${NGINX_REALIP_HEADER:='X-Forwarded-For'}
+PHPFPM_MAX_CHILDREN=${PHPFPM_MAX_CHILDREN:='5'}
 
 
 CMD=${CMD:='startup'}
@@ -121,6 +122,11 @@ if [ "$ENVIRONMENT_REPLACE" != '' ]; then
 	
 	rm -f /dev/shm/envsubst.tmp
 fi
+
+
+# PHP-FPM tweaks
+sed -i -e "s/^pm.max_children =.*/pm.max_children = $PHPFPM_MAX_CHILDREN/" /usr/local/etc/php-fpm.d/www.conf
+
 
 mkdir -p /var/log/php-fpm
 touch /var/log/php-fpm/error.log

@@ -130,4 +130,5 @@ RUN set -ex && \
 
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["php-fpm"]
+#CMD ["php-fpm"]
+CMD ["startup"]

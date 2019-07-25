@@ -126,9 +126,10 @@ fi
 
 
 # PHP-FPM tweaks
-sed -i -e "s/^pm.max_children =.*/pm.max_children = $PHPFPM_MAX_CHILDREN/" \
-	-e "s/^;?pm.max_requests =.*/pm.max_requests = $PHPFPM_MAX_REQUESTS/" \
-	/usr/local/etc/php-fpm.d/www.conf
+sed -i \
+  -e "s/^;\?pm.max_children =.*/pm.max_children = $PHPFPM_MAX_CHILDREN/" \
+  -e "s/^;\?pm.max_requests =.*/pm.max_requests = $PHPFPM_MAX_REQUESTS/" \
+  /usr/local/etc/php-fpm.d/www.conf
 
 
 mkdir -p /var/log/php-fpm

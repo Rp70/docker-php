@@ -1,5 +1,9 @@
 #!/bin/bash
-set -ex
+
+set -e
+if [ "$STARTUP_DEBUG" = 'yes' ]; then
+    set -x
+fi
 
 CMD=$1
 if [ "$CMD" != 'startup' ]; then

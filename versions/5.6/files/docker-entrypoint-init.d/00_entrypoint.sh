@@ -1,7 +1,7 @@
 #!/bin/bash
-set -ex
+set -e
 
-# Set defaults
+# Set defaults to environment variables which belongs to original source code.
 MAP_WWW_UID=${MAP_WWW_UID:='no'}
 TIMEZONE=${TIMEZONE:='UTC'}
 

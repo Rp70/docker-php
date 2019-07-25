@@ -145,4 +145,6 @@ The XDebug extension is installed but disabled by default. To enable, set the en
 
 #### Tweaks
 
-Set PHPFPM max_children set with `PHPFPM_MAX_CHILDREN=5`. You can increase with with an environment variable.
+You can tweak performance using an environment variable. The below environment variables use default settings. You can adjust them to fit your needs.
+PHP-FPM: pm.max_children set with `PHPFPM_MAX_CHILDREN=5`.
+PHP-FPM: pm.max_requests set with `PHPFPM_MAX_REQUESTS=0`.

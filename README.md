@@ -151,4 +151,4 @@ PHP-FPM: pm.max_children set with `PHPFPM_MAX_CHILDREN=5`.
 
 PHP-FPM: pm.max_requests set with `PHPFPM_MAX_REQUESTS=0`.
 
-DOCKER: STARTUP_DEBUG=[yes|no; default=no] to enforce entrypoint script to print executed commands.
+DOCKER: `STARTUP_DEBUG=[yes|no; default=no]` to enforce entrypoint script to print executed commands.

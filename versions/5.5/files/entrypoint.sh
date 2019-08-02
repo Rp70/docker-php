@@ -22,12 +22,11 @@ NGINX_ENABLE=${NGINX_ENABLE:=''}
 NGINX_PROCESSES=${NGINX_PROCESSES:='2'}
 NGINX_REALIP_FROM=${NGINX_REALIP_FROM:=''}
 NGINX_REALIP_HEADER=${NGINX_REALIP_HEADER:='X-Forwarded-For'}
+PHPFPM_ENABLE=${PHPFPM_ENABLE:=''}
 PHPFPM_MAX_CHILDREN=${PHPFPM_MAX_CHILDREN:='5'}
 PHPFPM_MAX_REQUESTS=${PHPFPM_MAX_REQUESTS:='0'}
-
-
+SUPERVISOR_ENABLE=${SUPERVISOR_ENABLE:=0}
 CMD=${CMD:='startup'}
-SUPERVISOR_ENABLE=0
 
 if [ "$CRON_COMMANDS" != '' ]; then
 	CRON_ENABLE="1"
@@ -125,17 +124,24 @@ if [ "$ENVIRONMENT_REPLACE" != '' ]; then
 fi
 
 
-# PHP-FPM tweaks
-sed -i \
-  -e "s/^;\?pm.max_children =.*/pm.max_children = $PHPFPM_MAX_CHILDREN/" \
-  -e "s/^;\?pm.max_requests =.*/pm.max_requests = $PHPFPM_MAX_REQUESTS/" \
-  /usr/local/etc/php-fpm.d/www.conf
+if [ "$PHPFPM_ENABLE" = '' ]; then
+	rm -f /etc/supervisor/conf.d/phpfpm.conf
+else
+	SUPERVISOR_ENABLE=$((SUPERVISOR_ENABLE+1))
+
+	# PHP-FPM tweaks
+	sed -i \
+		-e "s/^;\?pm.max_children =.*/pm.max_children = $PHPFPM_MAX_CHILDREN/" \
+		-e "s/^;\?pm.max_requests =.*/pm.max_requests = $PHPFPM_MAX_REQUESTS/" \
+		/usr/local/etc/php-fpm.d/www.conf
 
 
-mkdir -p /var/log/php-fpm
-touch /var/log/php-fpm/error.log
-chown -R www-data:www-data /var/log/php-fpm
-chmod 0777 /var/log/php-fpm
+	mkdir -p /var/log/php-fpm
+	touch /var/log/php-fpm/error.log
+	chown -R www-data:www-data /var/log/php-fpm
+	chmod 0777 /var/log/php-fpm
+fi
+
 
 if [ -e /entrypoint-hook-end.sh ]; then
 	. /entrypoint-hook-end.sh
@@ -154,3 +160,5 @@ if [ "$CMD" = 'startup' ]; then
 else
 	exec "$@"
 fi
+
+exit $?

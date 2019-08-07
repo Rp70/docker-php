@@ -43,12 +43,15 @@ echo "Fix PHP 5.3"
 echo "Fix PHP 5.4"
 (
   set -x;
-  sed -i -e 's/\(ENV XDEBUG_VERSION\) .*/\1 2.4.1/g' \
+  sed -i \
+    -e 's/\(ENV XDEBUG_VERSION\) .*/\1 2.4.1/g' \
     -e 's|/usr/local/etc/php-fpm.d/docker.conf|/usr/local/etc/php-fpm.conf|g' \
     -e 's|/usr/local/etc/php-fpm.d/www.conf|/usr/local/etc/php-fpm.conf|g' \
     -e 's/docker-php-pecl-install memcached/docker-php-pecl-install memcache/g' \
     -e 's/docker-php-ext-install opcache/docker-php-pecl-install ZendOpcache/g' \
     versions/5.4/Dockerfile
-  sed -i -e 's|/usr/local/etc/php-fpm.d/zz-docker.conf|/usr/local/etc/php-fpm.conf|g' \
-    versions/5.4/init.d/listen.sh
+  sed -i \
+    -e 's|/usr/local/etc/php-fpm.d/zz-docker.conf|/usr/local/etc/php-fpm.conf|g' \
+    -e 's|/usr/local/etc/php-fpm.d/www.conf|/usr/local/etc/php-fpm.conf|g' \
+    versions/5.4/init.d/listen.sh versions/5.4/files/entrypoint.sh
 )

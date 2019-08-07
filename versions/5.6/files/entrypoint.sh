@@ -15,10 +15,10 @@ fi
 
 
 ENVIRONMENT_REPLACE=${ENVIRONMENT_REPLACE:=''}
-CRON_ENABLE=${CRON_ENABLE:=''}
+CRON_ENABLE=${CRON_ENABLE:='0'}
 CRON_COMMANDS=${CRON_COMMANDS:=''}
-MEMCACHED_ENABLE=${MEMCACHED_ENABLE:=''}
-NGINX_ENABLE=${NGINX_ENABLE:=''}
+MEMCACHED_ENABLE=${MEMCACHED_ENABLE:='0'}
+NGINX_ENABLE=${NGINX_ENABLE:='0'}
 NGINX_PROCESSES=${NGINX_PROCESSES:='2'}
 NGINX_REALIP_FROM=${NGINX_REALIP_FROM:=''}
 NGINX_REALIP_HEADER=${NGINX_REALIP_HEADER:='X-Forwarded-For'}
@@ -31,7 +31,7 @@ CMD=${CMD:='startup'}
 if [ "$CRON_COMMANDS" != '' ]; then
 	CRON_ENABLE=1
 fi
-if [ "$CRON_ENABLE" = '' ]; then
+if [ "$CRON_ENABLE" = '0' ]; then
 	rm -f /etc/supervisor/conf.d/crond.conf
 else
 	SUPERVISOR_ENABLE=$((SUPERVISOR_ENABLE+1))
@@ -42,13 +42,13 @@ else
 	fi
 fi
 
-if [ "$MEMCACHED_ENABLE" = '' ]; then
+if [ "$MEMCACHED_ENABLE" = '0' ]; then
 	rm -f /etc/supervisor/conf.d/memcached.conf
 else
 	SUPERVISOR_ENABLE=$((SUPERVISOR_ENABLE+1))
 fi
 
-if [ "$NGINX_ENABLE" = '' ]; then
+if [ "$NGINX_ENABLE" = '0' ]; then
 	rm -f /etc/supervisor/conf.d/nginx.conf
 else
 	SUPERVISOR_ENABLE=$((SUPERVISOR_ENABLE+1))
@@ -129,7 +129,7 @@ if [ "$ENVIRONMENT_REPLACE" != '' ]; then
 fi
 
 
-if [ "$PHPFPM_ENABLE" = '' ]; then
+if [ "$PHPFPM_ENABLE" = '0' ]; then
 	rm -f /etc/supervisor/conf.d/phpfpm.conf
 else
 	SUPERVISOR_ENABLE=$((SUPERVISOR_ENABLE+1))

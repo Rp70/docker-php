@@ -22,19 +22,24 @@ NGINX_ENABLE=${NGINX_ENABLE:=''}
 NGINX_PROCESSES=${NGINX_PROCESSES:='2'}
 NGINX_REALIP_FROM=${NGINX_REALIP_FROM:=''}
 NGINX_REALIP_HEADER=${NGINX_REALIP_HEADER:='X-Forwarded-For'}
-PHPFPM_ENABLE=${PHPFPM_ENABLE:=''}
+PHPFPM_ENABLE=${PHPFPM_ENABLE:='1'}
 PHPFPM_MAX_CHILDREN=${PHPFPM_MAX_CHILDREN:='5'}
 PHPFPM_MAX_REQUESTS=${PHPFPM_MAX_REQUESTS:='0'}
 SUPERVISOR_ENABLE=${SUPERVISOR_ENABLE:=0}
 CMD=${CMD:='startup'}
 
 if [ "$CRON_COMMANDS" != '' ]; then
-	CRON_ENABLE="1"
+	CRON_ENABLE=1
 fi
 if [ "$CRON_ENABLE" = '' ]; then
 	rm -f /etc/supervisor/conf.d/crond.conf
 else
 	SUPERVISOR_ENABLE=$((SUPERVISOR_ENABLE+1))
+
+	if [ "$CRON_COMMANDS" != '' ]; then
+		echo $CRON_COMMANDS > /var/spool/cron/crontabs/root
+		chown root.crontab /var/spool/cron/crontabs/root
+	fi
 fi
 
 if [ "$MEMCACHED_ENABLE" = '' ]; then

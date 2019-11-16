@@ -10,7 +10,8 @@ versions=( "${versions[@]%/}" )
 cd ..
 
 for version in "${versions[@]}"; do
-    tag=$version`date +%F`
+    tag=`date +%F`
     docker pull php:$version-fpm
-    docker build --tag phpfpm:$tag versions/$version
+    docker build --tag phpfpm-$version:$tag versions/$version
+    docker tag phpfpm-$version:$tag phpfpm-$version:latest
 done

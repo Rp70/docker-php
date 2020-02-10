@@ -12,8 +12,9 @@ cd ..
 for version in "${versions[@]}"; do
     echo "Updating $version"
     (
-      set -x
-      rm -rf versions/$version/*
+      #set -x
+      rm -rf versions/$version
+      mkdir -p versions/$version
       cp -r README.md template/* versions/$version/
       sed -i -e 's/{{ version }}/'$version'/g' versions/$version/Dockerfile
     )
@@ -27,7 +28,7 @@ done
 
 echo "Fix PHP 5.3"
 (
-  set -x;
+  #set -x;
   sed -i -e '1s|.*|FROM docker-php-5.3|' \
       -e '/--with-freetype-dir/i\
         \  && mkdir /usr/include/freetype2/freetype \\ \
@@ -42,7 +43,7 @@ echo "Fix PHP 5.3"
 
 echo "Fix PHP 5.4"
 (
-  set -x;
+  #set -x;
   sed -i \
     -e 's/\(ENV XDEBUG_VERSION\) .*/\1 2.4.1/g' \
     -e 's|/usr/local/etc/php-fpm.d/docker.conf|/usr/local/etc/php-fpm.conf|g' \

@@ -73,7 +73,14 @@ RUN docker-php-pecl-install xdebug-$XDEBUG_VERSION && \
 
 
 # Use SSMTP
-RUN apt-install ssmtp && \
+RUN if [ "`apt-cache search ssmtp`" = '' ]; then \
+      # Try to get ssmtp package from Ubuntu. It totally compatible with debian because Ubuntu uses the same package.
+      apt-get install -y libgnutls-openssl27 && \
+      curl -f -L --output /tmp/ssmtp.deb http://mirrors.kernel.org/ubuntu/pool/universe/s/ssmtp/ssmtp_2.64-8ubuntu1_amd64.deb && \
+      dpkg -i /tmp/ssmtp.deb; \
+    else \
+      apt-install ssmtp; \
+    fi ; \
     groupadd -g 500 ssmtp && \
     chown :ssmtp /usr/sbin/ssmtp && \
     chmod g+s /usr/sbin/ssmtp && \
@@ -113,9 +120,9 @@ COPY etc/*.ini /usr/local/etc/php/
 RUN cd /usr/local/etc/php && cp prod.ini conf.d/environment.ini
 RUN sed -i -e '/^access.log/ s/^/;/' /usr/local/etc/php-fpm.d/docker.conf && \
     sed -i -e '/^listen =/ s/^/;/' /usr/local/etc/php-fpm.d/www.conf && \
-    sed -i -e "s/^pm = dynamic/pm = ondemand/" /usr/local/etc/php-fpm.d/www.conf
-
-RUN true 11
+    sed -i -e "s/^pm = dynamic/pm = ondemand/" /usr/local/etc/php-fpm.d/www.conf && \
+    # Restore 'open_basedir' directive
+    sed -i -e '/^;open_basedir/ s/^;//' /usr/local/etc/php/conf.d/zza_customs.ini
 
 # Add entrypoint
 COPY init.d /docker-entrypoint-init.d/
@@ -123,8 +130,8 @@ COPY docker-entrypoint.sh /
 
 RUN set -ex && \
   chmod +x /docker-entrypoint.sh && \
-  # Restore 'open_basedir' directive
-  sed -i -e '/^;open_basedir/ s/^;//' /usr/local/etc/php/conf.d/zza_customs.ini
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
 
 
 ENTRYPOINT ["/docker-entrypoint.sh"]

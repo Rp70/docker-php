@@ -156,9 +156,16 @@ PHP-FPM: pm.max_requests set with `PHPFPM_MAX_REQUESTS=0`.
 
 DOCKER: `STARTUP_DEBUG=[yes|no; default=no]` to enforce entrypoint script to print executed commands.
 
+### Contributions
+I welcome all pull requests and any feedback to make this project go further and be more useful to everyone.
+
+
 ### TODO
-#### PHP
+#### README.md
+- [ ] Usage instructions.
+#### Dockerfile
 - [ ] Remove nginx from image.
+#### PHP
 - [ ] Support custom data serializer: https://github.com/igbinary/igbinary and https://github.com/msgpack/msgpack-php to save memory requirement with memcached and custom session handler.
 #### ./update.sh
 - [x] Support Memcached version replacement as described at https://github.com/php-memcached-dev/php-memcached

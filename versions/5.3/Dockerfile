@@ -46,6 +46,12 @@ RUN apt-install \
       libfreetype6-dev \
       libjpeg62-turbo-dev \
       libmcrypt-dev \
+      # Multibyte String
+      # ----------------
+      # Since 7.4, the oniguruma library is no longer bundled with PHP, instead libonig needs to be available on the system.
+      # Alternatively --disable-mbregex can be used to disable the mbregex component.
+      # Reference: https://www.php.net/manual/en/migration74.other-changes.php
+      libonig-dev \
       libpng12-dev \
       imagemagick \
       ghostscript \
@@ -99,7 +105,7 @@ RUN set -x \
 
 
 # Include composer
-RUN apt-install git rsync unzip zlib1g-dev && \
+RUN apt-install git rsync unzip zlib1g-dev libzip-dev && \
     docker-php-ext-install zip
 
 ENV COMPOSER_VERSION 1.7.2

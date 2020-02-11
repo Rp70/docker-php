@@ -45,6 +45,12 @@ RUN set -ex && \
 RUN apt-install \
       libfreetype6-dev \
       libjpeg62-turbo-dev \
+      # Multibyte String
+      # ----------------
+      # Since 7.4, the oniguruma library is no longer bundled with PHP, instead libonig needs to be available on the system.
+      # Alternatively --disable-mbregex can be used to disable the mbregex component.
+      # Reference: https://www.php.net/manual/en/migration74.other-changes.php
+      libonig-dev \
       libpng-dev \
       imagemagick \
       ghostscript \
@@ -52,7 +58,7 @@ RUN apt-install \
       mysqli \
       pdo_mysql \
       mbstring \
-  && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+  && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
   && docker-php-ext-install gd
 
 #RUN docker-php-pecl-install uploadprogress
@@ -63,7 +69,7 @@ RUN apt-install zlib1g-dev libicu-dev g++ && \
     apt-purge g++
 
 ENV USE_XDEBUG no
-ENV XDEBUG_VERSION 2.6.1
+ENV XDEBUG_VERSION 2.9.2
 RUN docker-php-pecl-install xdebug-$XDEBUG_VERSION && \
     echo "xdebug.remote_enable=on\nxdebug.remote_connect_back=on" > /usr/local/etc/php/conf.d/xdebug.ini && \
     mkdir -p /usr/local/etc/php/xdebug.d && \
@@ -95,7 +101,7 @@ RUN set -x \
 
 
 # Include composer
-RUN apt-install git rsync unzip zlib1g-dev && \
+RUN apt-install git rsync unzip zlib1g-dev libzip-dev && \
     docker-php-ext-install zip
 
 ENV COMPOSER_VERSION 1.7.2

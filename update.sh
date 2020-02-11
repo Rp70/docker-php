@@ -20,9 +20,18 @@ for version in "${versions[@]}"; do
     )
     if [[ $version == 7.* ]]; then
       sed -i -e '/uploadprogress/ s/^#*/#/' versions/$version/Dockerfile
-      sed -i -e 's/\(ENV XDEBUG_VERSION\) .*/\1 2.6.1/g' versions/$version/Dockerfile
+      sed -i -e 's/\(ENV XDEBUG_VERSION\) .*/\1 2.9.2/g' versions/$version/Dockerfile
       sed -i -e 's/libpng12-dev/libpng-dev/g' -e '/mcrypt/ d'  versions/$version/Dockerfile
       sed -i -e '/; track_errors/ { N;N;N;N;N;d; }' versions/$version/etc/{dev,prod}.ini
+    fi
+
+    if (( $(bc -l <<< "$version >= 7.4") )); then
+      echo "Fix $version"
+      # Since PHP 7.4, a number of extensions have been migrated to exclusively use pkg-config for the detection of library dependencies.
+      # Generally, this means that instead of using --with-foo-dir=DIR or similar only --with-foo is used.
+      # Reference: https://www.php.net/manual/en/migration74.other-changes.php
+      sed -i -e 's/\(\-\-with\-\(freetype\|jpeg\|webp\|xpm\)\)\-dir/\1/g' \
+        versions/$version/Dockerfile
     fi
 done
 

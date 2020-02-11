@@ -36,24 +36,24 @@ RUN set -ex && \
   # Disable 'open_basedir' directive so PECL and other PHP commands work properly.
   sed -i -e '/^open_basedir/ s/^/;/' /usr/local/etc/php/conf.d/zza_customs.ini && \
   docker-php-pecl-install imagick && \
-  docker-php-pecl-install memcached && \
-  docker-php-ext-install opcache && \
-  true
+  docker-php-pecl-install memcached-3.1.5 && \
+  docker-php-ext-install opcache
 
 
 # Install useful extensions
 RUN apt-install \
       libfreetype6-dev \
       libjpeg62-turbo-dev \
+      libpng-dev \
+      imagemagick \
+      ghostscript \
+      \
       # Multibyte String
       # ----------------
       # Since 7.4, the oniguruma library is no longer bundled with PHP, instead libonig needs to be available on the system.
       # Alternatively --disable-mbregex can be used to disable the mbregex component.
       # Reference: https://www.php.net/manual/en/migration74.other-changes.php
       libonig-dev \
-      libpng-dev \
-      imagemagick \
-      ghostscript \
   && docker-php-ext-install \
       mysqli \
       pdo_mysql \
@@ -61,7 +61,7 @@ RUN apt-install \
   && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
   && docker-php-ext-install gd
 
-#RUN docker-php-pecl-install uploadprogress
+RUN docker-php-pecl-install uploadprogress
 
 RUN apt-install zlib1g-dev libicu-dev g++ && \
     docker-php-ext-configure intl && \
@@ -69,8 +69,8 @@ RUN apt-install zlib1g-dev libicu-dev g++ && \
     apt-purge g++
 
 ENV USE_XDEBUG no
-ENV XDEBUG_VERSION 2.9.2
-RUN docker-php-pecl-install xdebug-$XDEBUG_VERSION && \
+ENV XDEBUG_VERSION 2.7.2
+RUN docker-php-pecl-install xdebug-2.7.2 && \
     echo "xdebug.remote_enable=on\nxdebug.remote_connect_back=on" > /usr/local/etc/php/conf.d/xdebug.ini && \
     mkdir -p /usr/local/etc/php/xdebug.d && \
     mv /usr/local/etc/php/conf.d/*xdebug.ini /usr/local/etc/php/xdebug.d/
@@ -81,7 +81,8 @@ RUN if [ "`apt-cache search ssmtp`" = '' ]; then \
       # Try to get ssmtp package from Ubuntu. It totally compatible with debian because Ubuntu uses the same package.
       apt-get install -y libgnutls-openssl27 && \
       curl -f -L --output /tmp/ssmtp.deb http://mirrors.kernel.org/ubuntu/pool/universe/s/ssmtp/ssmtp_2.64-8ubuntu1_amd64.deb && \
-      dpkg -i /tmp/ssmtp.deb; \
+      dpkg -i /tmp/ssmtp.deb && \
+      rm -f /tmp/ssmtp.deb; \
     else \
       apt-install ssmtp; \
     fi ; \
@@ -104,7 +105,7 @@ RUN set -x \
 RUN apt-install git rsync unzip zlib1g-dev libzip-dev && \
     docker-php-ext-install zip
 
-ENV COMPOSER_VERSION 1.7.2
+ENV COMPOSER_VERSION 1.9.3
 ENV COMPOSER_HOME /var/www/.composer
 ENV PATH vendor/bin:$COMPOSER_HOME/vendor/bin:$PATH
 

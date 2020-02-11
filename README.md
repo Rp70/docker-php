@@ -10,14 +10,17 @@ This image adds common things that I usually need to the official [php (fpm)](ht
 * **PHP**
     * gd
     * intl
+    * imagick (newly added on Rp70/docker-php)
     * mbstring
     * mcrypt
     * mysqli
+    * opcache (newly added on Rp70/docker-php, it was named ZendOpcache in PHP 5.2-5.5)
     * pdo_mysql
     * zip
 
 * **PECL**
-    * uploadprogress
+    * memcached (newly added on Rp70/docker-php)
+    * uploadprogress (Not tested yet by Rp70, other web servers and PHP-FPM are not yet supported as mentioned by author)
     * xdebug (disabled by default)
 
 ### Tooling
@@ -152,3 +155,9 @@ PHP-FPM: pm.max_children set with `PHPFPM_MAX_CHILDREN=5`.
 PHP-FPM: pm.max_requests set with `PHPFPM_MAX_REQUESTS=0`.
 
 DOCKER: `STARTUP_DEBUG=[yes|no; default=no]` to enforce entrypoint script to print executed commands.
+
+### TODO
+#### ./update.sh
+- [x] Support Memcached version replacement as described at https://github.com/php-memcached-dev/php-memcached
+- [x] Support Xdebug version replacement as described at https://xdebug.org/docs/compat
+

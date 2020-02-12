@@ -163,6 +163,7 @@ I welcome all pull requests and any feedback to make this project go further and
 ### TODO
 #### README.md
 - [ ] Usage instructions.
+- [ ] List of supported extensions.
 #### Dockerfile
 - [ ] Remove nginx from image.
 #### PHP

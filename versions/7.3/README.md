@@ -1,6 +1,6 @@
 # Docker image running PHP-FPM
 
-This image adds common things that I usually need to the official [php (fpm)](https://registry.hub.docker.com/_/php/) image. See that repo for basic usage.
+This image adds common things that I usually need to the official [php (fpm)](https://hub.docker.com/_/php/) image. See that repo for basic usage.
 
 
 ## What was added?
@@ -140,7 +140,7 @@ To use other settings, override in your Dockerfile:
 
 #### Timezone
 
-The default timezone is set with `TIMEZONE=Atlantic/Azores`. Change it with an environment variable.
+The default timezone is set with `TIMEZONE=UTC`. Change it with an environment variable.
 
 #### XDebug
 
@@ -156,7 +156,18 @@ PHP-FPM: pm.max_requests set with `PHPFPM_MAX_REQUESTS=0`.
 
 DOCKER: `STARTUP_DEBUG=[yes|no; default=no]` to enforce entrypoint script to print executed commands.
 
+### Contributions
+I welcome all pull requests and any feedback to make this project go further and be more useful to everyone.
+
+
 ### TODO
+#### README.md
+- [ ] Usage instructions.
+- [ ] List of supported extensions.
+#### Dockerfile
+- [ ] Remove nginx from image.
+#### PHP
+- [ ] Support custom data serializer: https://github.com/igbinary/igbinary and https://github.com/msgpack/msgpack-php to save memory requirement with memcached and custom session handler.
 #### ./update.sh
 - [x] Support Memcached version replacement as described at https://github.com/php-memcached-dev/php-memcached
 - [x] Support Xdebug version replacement as described at https://xdebug.org/docs/compat

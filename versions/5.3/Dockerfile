@@ -1,4 +1,4 @@
-FROM docker-php-5.3
+FROM rp70/php-fpm-5.3
 LABEL original-maintainer="helder"
 LABEL maintainer="Rp70"
 
@@ -60,8 +60,8 @@ RUN apt-install \
       mysqli \
       pdo_mysql \
       mbstring \
-          && mkdir /usr/include/freetype2/freetype \ 
-          && ln -s /usr/include/freetype2/freetype.h /usr/include/freetype2/freetype/freetype.h \
+                && mkdir /usr/include/freetype2/freetype \ 
+                && ln -s /usr/include/freetype2/freetype.h /usr/include/freetype2/freetype/freetype.h \
   && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
   && docker-php-ext-install gd
 

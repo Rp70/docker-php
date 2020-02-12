@@ -42,7 +42,6 @@ cd ..
 for version in "${versions[@]}"; do
     echo "Updating $version"
     (
-      #set -x
       rm -rf versions/$version
       mkdir -p versions/$version
       cp -r README.md template/* versions/$version/
@@ -65,6 +64,33 @@ for version in "${versions[@]}"; do
       sed -i -e "s/docker-php-pecl-install memcached/docker-php-pecl-install memcached-$replaceVersion/g" \
         versions/$version/Dockerfile
     fi
+
+    case "$version" in
+      '5.3')
+        sed -i -e '1s|.*|FROM rp70/php-fpm-5.3|' \
+            -e '/--with-freetype-dir/i\
+              \  && mkdir /usr/include/freetype2/freetype \\ \
+              \  && ln -s /usr/include/freetype2/freetype.h /usr/include/freetype2/freetype/freetype.h \\' \
+            -e 's/docker-php-pecl-install imagick/docker-php-pecl-install imagick-3.3.0/g' \
+            -e 's/docker-php-pecl-install memcached/docker-php-pecl-install memcache/g' \
+          versions/$version/Dockerfile
+        cp fpm-env.sh versions/5.3/init.d/
+      ;;
+
+      '5.4')
+        sed -i \
+          -e 's|/usr/local/etc/php-fpm.d/docker.conf|/usr/local/etc/php-fpm.conf|g' \
+          -e 's|/usr/local/etc/php-fpm.d/www.conf|/usr/local/etc/php-fpm.conf|g' \
+          -e 's/docker-php-ext-install opcache/docker-php-pecl-install ZendOpcache/g' \
+          versions/$version/Dockerfile
+        sed -i \
+          -e 's|/usr/local/etc/php-fpm.d/zz-docker.conf|/usr/local/etc/php-fpm.conf|g' \
+          -e 's|/usr/local/etc/php-fpm.d/www.conf|/usr/local/etc/php-fpm.conf|g' \
+          versions/$version/init.d/listen.sh versions/$version/files/entrypoint.sh
+      ;;
+
+    esac
+
 
     if (( $(bc -l <<< "$version < 5.5") )); then
       echo "Fix version <= $version"
@@ -93,30 +119,3 @@ for version in "${versions[@]}"; do
     echo
 
 done
-
-echo "Fix PHP 5.3"
-(
-  #set -x;
-  sed -i -e '1s|.*|FROM docker-php-5.3|' \
-      -e '/--with-freetype-dir/i\
-        \  && mkdir /usr/include/freetype2/freetype \\ \
-        \  && ln -s /usr/include/freetype2/freetype.h /usr/include/freetype2/freetype/freetype.h \\' \
-      -e 's/docker-php-pecl-install imagick/docker-php-pecl-install imagick-3.3.0/g' \
-      -e 's/docker-php-pecl-install memcached/docker-php-pecl-install memcache/g' \
-    versions/5.3/Dockerfile
-  cp fpm-env.sh versions/5.3/init.d/
-)
-
-echo "Fix PHP 5.4"
-(
-  #set -x;
-  sed -i \
-    -e 's|/usr/local/etc/php-fpm.d/docker.conf|/usr/local/etc/php-fpm.conf|g' \
-    -e 's|/usr/local/etc/php-fpm.d/www.conf|/usr/local/etc/php-fpm.conf|g' \
-    -e 's/docker-php-ext-install opcache/docker-php-pecl-install ZendOpcache/g' \
-    versions/5.4/Dockerfile
-  sed -i \
-    -e 's|/usr/local/etc/php-fpm.d/zz-docker.conf|/usr/local/etc/php-fpm.conf|g' \
-    -e 's|/usr/local/etc/php-fpm.d/www.conf|/usr/local/etc/php-fpm.conf|g' \
-    versions/5.4/init.d/listen.sh versions/5.4/files/entrypoint.sh
-)

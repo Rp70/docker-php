@@ -1,6 +1,6 @@
 FROM php:{{ version }}-fpm
-LABEL original-maintainer="helder"
 LABEL maintainer="Rp70"
+LABEL original-maintainer="helder"
 
 
 COPY bin/* /usr/local/bin/

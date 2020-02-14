@@ -172,10 +172,13 @@ DOCKER: `STARTUP_DEBUG=[yes|no; default=no]` to enforce entrypoint script to pri
 #### README.md
 - [ ] Usage instructions.
 - [ ] List of supported extensions.
+
 #### Dockerfile
 - [ ] Remove nginx from image.
+
 #### PHP
 - [ ] Support custom data serializer: https://github.com/igbinary/igbinary and https://github.com/msgpack/msgpack-php to save memory requirement with memcached and custom session handler.
+
 #### ./update.sh
 - [x] Support Memcached version replacement as described at https://github.com/php-memcached-dev/php-memcached
 - [x] Support Xdebug version replacement as described at https://xdebug.org/docs/compat

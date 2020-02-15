@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -ex
 
 cd versions
@@ -11,7 +11,6 @@ cd ..
 
 for version in "${versions[@]}"; do
     tag=`date +%F`
-    time docker pull php:$version-fpm
-    time docker build --tag phpfpm-$version:$tag versions/$version
+    time docker build --pull --tag phpfpm-$version:$tag versions/$version | tee tmp/phpfpm-$version.log
     time docker tag phpfpm-$version:$tag phpfpm-$version:latest
 done

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e
 
 # PHP 5.3 does not have "clear_env = no", so we need to copy the environment to php-fpm.conf

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 SMTP_CONF=/etc/ssmtp/ssmtp.conf
 

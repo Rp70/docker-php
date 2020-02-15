@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 : ${DEV_LOG_TARGET:=/var/run/rsyslog/dev/log}
 

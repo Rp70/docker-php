@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e
 
 CONF=/usr/local/etc/php-fpm.d/zz-docker.conf

@@ -1,6 +1,6 @@
 FROM php:5.6-fpm
-LABEL original-maintainer="helder"
 LABEL maintainer="Rp70"
+LABEL original-maintainer="helder"
 
 
 COPY bin/* /usr/local/bin/
@@ -82,7 +82,7 @@ RUN docker-php-pecl-install xdebug-2.5.5 && \
 RUN if [ "`apt-cache search ssmtp`" = '' ]; then \
       # Try to get ssmtp package from Ubuntu. It totally compatible with debian because Ubuntu uses the same package.
       apt-get install -y libgnutls-openssl27 && \
-      curl -f -L --output /tmp/ssmtp.deb http://mirrors.kernel.org/ubuntu/pool/universe/s/ssmtp/ssmtp_2.64-8ubuntu1_amd64.deb && \
+      curl -f -L --output /tmp/ssmtp.deb https://mirrors.edge.kernel.org//ubuntu/pool/universe/s/ssmtp/ssmtp_2.64-8ubuntu1_amd64.deb && \
       dpkg -i /tmp/ssmtp.deb && \
       rm -f /tmp/ssmtp.deb; \
     else \

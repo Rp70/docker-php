@@ -174,7 +174,7 @@ DOCKER: `STARTUP_DEBUG=[yes|no; default=no]` to enforce entrypoint script to pri
 - [ ] List of supported extensions.
 
 #### Dockerfile
-- [ ] Remove nginx from image.
+- [x] Remove nginx from image.
 
 #### PHP
 - [ ] Support custom data serializer: https://github.com/igbinary/igbinary and https://github.com/msgpack/msgpack-php to save memory requirement with memcached and custom session handler.

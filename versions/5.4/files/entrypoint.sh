@@ -18,10 +18,6 @@ ENVIRONMENT_REPLACE=${ENVIRONMENT_REPLACE:=''}
 CRON_ENABLE=${CRON_ENABLE:='0'}
 CRON_COMMANDS=${CRON_COMMANDS:=''}
 MEMCACHED_ENABLE=${MEMCACHED_ENABLE:='0'}
-NGINX_ENABLE=${NGINX_ENABLE:='0'}
-NGINX_PROCESSES=${NGINX_PROCESSES:='2'}
-NGINX_REALIP_FROM=${NGINX_REALIP_FROM:=''}
-NGINX_REALIP_HEADER=${NGINX_REALIP_HEADER:='X-Forwarded-For'}
 PHPFPM_ENABLE=${PHPFPM_ENABLE:='1'}
 PHPFPM_MAX_CHILDREN=${PHPFPM_MAX_CHILDREN:='5'}
 PHPFPM_MAX_REQUESTS=${PHPFPM_MAX_REQUESTS:='0'}
@@ -48,58 +44,27 @@ else
 	SUPERVISOR_ENABLE=$((SUPERVISOR_ENABLE+1))
 fi
 
-if [ "$NGINX_ENABLE" = '0' ]; then
-	rm -f /etc/supervisor/conf.d/nginx.conf
+if [ "$PHPFPM_ENABLE" = '0' ]; then
+	rm -f /etc/supervisor/conf.d/phpfpm.conf
 else
 	SUPERVISOR_ENABLE=$((SUPERVISOR_ENABLE+1))
-	ENVIRONMENT_REPLACE="$ENVIRONMENT_REPLACE /etc/nginx"
-	
-	#rm -rf /etc/nginx/sites-available/default
-	#sed -i 's/^user/daemon off;\nuser/g' /etc/nginx/nginx.conf
-	#sed -i 's/^user www-data;/user coin;/g' /etc/nginx/nginx.conf
-	sed -i "s/^worker_processes auto;/worker_processes $NGINX_PROCESSES;/g" /etc/nginx/nginx.conf
-	#sed -i 's/\baccess_log[^;]*;/access_log \/dev\/stdout;/g' /etc/nginx/nginx.conf
-	#sed -i 's/\berror_log[^;]*;/error_log \/dev\/stdout;/g' /etc/nginx/nginx.conf
 
-	rm -rf /etc/nginx/modules-enabled/*.conf
-	
-	### realip_module ###
-	# Cloudflare IPv4: https://www.cloudflare.com/ips-v4
-	# Cloudflare IPv6: https://www.cloudflare.com/ips-v6
-	CONFFILE=/etc/nginx/conf.d/realip.conf
-	IPADDRS=""
-	for ipaddr in $NGINX_REALIP_FROM; do
-		if [ "$ipaddr" = "cloudflare" ]; then
-			IPADDRS="$IPADDRS `curl -f --connect-timeout 30 https://www.cloudflare.com/ips-v4 2> /dev/null`"
-			if [ $? -gt 0 ]; then
-				IPADDRS="$IPADDRS `cat /tmp/cloudflare-ips-v4 2> /dev/null`"
-			fi
-			sleep 1
+	# PHP-FPM tweaks
+	sed -i \
+		-e "s/^;\?pm.max_children =.*/pm.max_children = $PHPFPM_MAX_CHILDREN/" \
+		-e "s/^;\?pm.max_requests =.*/pm.max_requests = $PHPFPM_MAX_REQUESTS/" \
+		/usr/local/etc/php-fpm.conf
 
-			IPADDRS="$IPADDRS `curl -f --connect-timeout 30 https://www.cloudflare.com/ips-v6 2> /dev/null`"
-			if [ $? -gt 0 ]; then
-				IPADDRS="$IPADDRS `cat /tmp/cloudflare-ips-v6 2> /dev/null`"
-			fi
 
-			NGINX_REALIP_HEADER='CF-Connecting-IP'
-		else
-			# Try to get IP if it's a hostname
-			for ipaddr2 in `getent hosts $ipaddr | awk '{print $1}'`; do
-				IPADDRS="$IPADDRS $ipaddr2"
-			done
-		fi
-	done
+	mkdir -p /var/log/php-fpm
+	touch /var/log/php-fpm/error.log
+	chown -R www-data:www-data /var/log/php-fpm
+	chmod 0777 /var/log/php-fpm
+fi
 
-	if [ "$IPADDRS" != '' ]; then
-		echo "### This file is auto-generated. ###" > $CONFFILE
-		echo "### Your changes will be overwriten. ###" >> $CONFFILE
-		echo >> $CONFFILE
-		for ipaddr in $IPADDRS; do
-			echo "set_real_ip_from $ipaddr;" >> $CONFFILE
-		done
-		echo "real_ip_header $NGINX_REALIP_HEADER;" >> $CONFFILE
-	fi
-	### / realip_module ###
+
+if [ -e /entrypoint-hook-end.sh ]; then
+	. /entrypoint-hook-end.sh
 fi
 
 
@@ -129,31 +94,7 @@ if [ "$ENVIRONMENT_REPLACE" != '' ]; then
 fi
 
 
-if [ "$PHPFPM_ENABLE" = '0' ]; then
-	rm -f /etc/supervisor/conf.d/phpfpm.conf
-else
-	SUPERVISOR_ENABLE=$((SUPERVISOR_ENABLE+1))
-
-	# PHP-FPM tweaks
-	sed -i \
-		-e "s/^;\?pm.max_children =.*/pm.max_children = $PHPFPM_MAX_CHILDREN/" \
-		-e "s/^;\?pm.max_requests =.*/pm.max_requests = $PHPFPM_MAX_REQUESTS/" \
-		/usr/local/etc/php-fpm.conf
-
-
-	mkdir -p /var/log/php-fpm
-	touch /var/log/php-fpm/error.log
-	chown -R www-data:www-data /var/log/php-fpm
-	chmod 0777 /var/log/php-fpm
-fi
-
-
-if [ -e /entrypoint-hook-end.sh ]; then
-	. /entrypoint-hook-end.sh
-fi
-
-
-# Correct broken stuff caused by hooks, inherited docker images
+# Correct broken stuff caused by hooks, inherited docker images, mounts from host.
 chmod a+rwxt /tmp
 
 if [ "$CMD" = 'startup' ]; then

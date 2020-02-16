@@ -20,14 +20,10 @@ RUN set -ex && \
     echo 'deb http://security.debian.org/debian-security jessie/updates main' >> /etc/apt/sources.list; \
   fi; \
 	chmod +x /entrypoint*.sh /usr/local/bin/apt-install /usr/local/bin/apt-purge /usr/local/bin/docker-php-pecl-install && \
-	curl -f --output /tmp/cloudflare-ips-v4 --connect-timeout 30 https://www.cloudflare.com/ips-v4 2> /dev/null && \
-	sleep 3 && \
-	curl -f --output /tmp/cloudflare-ips-v6 --connect-timeout 30 https://www.cloudflare.com/ips-v6 2> /dev/null && \
-	ls -lah /tmp/cloudflare* && \
 	apt-get update -y && \
-	apt-get install --no-install-recommends -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" \
+	apt-install \
 		gettext-base \
-    cron nginx memcached supervisor \
+    cron memcached supervisor \
 		# The package 'procps' provides: ps, top, uptime, pkill, watch, etc...
 		# Reference: https://packages.ubuntu.com/xenial/amd64/procps/filelist
 		procps \
@@ -79,7 +75,7 @@ RUN docker-php-pecl-install xdebug-2.7.2 && \
 # Use SSMTP
 RUN if [ "`apt-cache search ssmtp`" = '' ]; then \
       # Try to get ssmtp package from Ubuntu. It totally compatible with debian because Ubuntu uses the same package.
-      apt-get install -y libgnutls-openssl27 && \
+      apt-install -y libgnutls-openssl27 && \
       curl -f -L --output /tmp/ssmtp.deb https://mirrors.edge.kernel.org//ubuntu/pool/universe/s/ssmtp/ssmtp_2.64-8ubuntu1_amd64.deb && \
       dpkg -i /tmp/ssmtp.deb && \
       rm -f /tmp/ssmtp.deb; \

@@ -107,12 +107,13 @@ ENV PATH vendor/bin:$COMPOSER_HOME/vendor/bin:$PATH
 
 RUN curl -sS https://getcomposer.org/installer | php -- \
       --install-dir=/usr/local/bin \
-      --filename=composer \
+      --filename=composer.phar \
       --version=${COMPOSER_VERSION}
 
 RUN mkdir -p $COMPOSER_HOME/cache && \
     chown -R www-data:www-data /var/www && \
-    echo "phar.readonly = off" > /usr/local/etc/php/conf.d/phar.ini
+    echo "phar.readonly = off" > /usr/local/etc/php/conf.d/phar.ini && \
+    chmod +x /usr/local/bin/composer
 VOLUME $COMPOSER_HOME/cache
 
 

@@ -11,6 +11,7 @@ I welcome all pull requests and any feedback to make this project go further and
 
 ### Contributors
 * Helder Correia: https://github.com/helderco/docker-php. I forked his repository.
+* Filip Procházka: I got the idea of [a separated composer.ini for Composer](https://gist.github.com/fprochazka/8f2f233c6200937fd4c7de23d10b9148).
 * [ List your name here ]
 
 
@@ -38,7 +39,7 @@ I welcome all pull requests and any feedback to make this project go further and
 
 * gosu
 * ssmtp
-* composer
+* composer with a separated .ini
 * git
 * rsync
 * unzip
@@ -73,6 +74,9 @@ To use development settings, set `ENVIRONMENT=dev`.
 * Changed process manager to `ondemand`;
 * Silenced access logs;
 
+#### /usr/local/etc/php/composer.ini
+
+This configuration file is dedicated to Composer. Thanks for [fprochazka](https://gist.github.com/fprochazka/8f2f233c6200937fd4c7de23d10b9148) for the idea.
 
 ### Entrypoint features
 
@@ -174,7 +178,7 @@ DOCKER: `STARTUP_DEBUG=[yes|no; default=no]` to enforce entrypoint script to pri
 - [ ] List of supported extensions.
 
 #### Dockerfile
-- [ ] Remove nginx from image.
+- [x] Remove nginx from image.
 
 #### PHP
 - [ ] Support custom data serializer: https://github.com/igbinary/igbinary and https://github.com/msgpack/msgpack-php to save memory requirement with memcached and custom session handler.

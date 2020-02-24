@@ -104,7 +104,7 @@ if [ "$CMD" = 'startup' ]; then
 		exec php-fpm --nodaemonize;
 	fi
 else
-	exec "$@"
+	exec gosu www-data $@
 fi
 
 exit $?

@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+php -n -c /usr/local/etc/php/composer.ini /usr/local/bin/composer.phar $@

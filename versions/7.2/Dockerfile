@@ -14,16 +14,14 @@ COPY files/ /
 ENV PHP_MINOR_VERSION 7.2
 RUN set -ex && \
   . /etc/os-release && \
-  # If OS is Debian 8 (Jessie), update sources.list
+  # If the OS is Debian 8 (Jessie), update sources.list
   if [ "$ID" = 'debian' -a "$VERSION_ID" = '8' ]; then \
     echo 'deb http://deb.debian.org/debian jessie main' > /etc/apt/sources.list; \
     echo 'deb http://security.debian.org/debian-security jessie/updates main' >> /etc/apt/sources.list; \
-    gpg --recv-keys AA8E81B4331F7F50; \
-    gpg --export AA8E81B4331F7F50 | apt-key add -; \
   fi; \
 	chmod +x /entrypoint*.sh /usr/local/bin/apt-clean /usr/local/bin/apt-install /usr/local/bin/apt-purge /usr/local/bin/docker-php-pecl-install && \
 	apt-get update -y && \
-	apt-install \
+	apt-install debian-archive-keyring \
 		gettext-base \
     cron memcached supervisor \
 		# The package 'procps' provides: ps, top, uptime, pkill, watch, etc...

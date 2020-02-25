@@ -76,7 +76,7 @@ To use development settings, set `ENVIRONMENT=dev`.
 
 #### /usr/local/etc/php/composer.ini
 
-This configuration file is dedicated to Composer. Thanks for [fprochazka](https://gist.github.com/fprochazka/8f2f233c6200937fd4c7de23d10b9148) for the idea.
+This configuration file is dedicated to Composer. Thanks [fprochazka](https://gist.github.com/fprochazka/8f2f233c6200937fd4c7de23d10b9148) for the idea.
 
 ### Entrypoint features
 

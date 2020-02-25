@@ -18,8 +18,10 @@ RUN set -ex && \
   if [ "$ID" = 'debian' -a "$VERSION_ID" = '8' ]; then \
     echo 'deb http://deb.debian.org/debian jessie main' > /etc/apt/sources.list; \
     echo 'deb http://security.debian.org/debian-security jessie/updates main' >> /etc/apt/sources.list; \
+    gpg --recv-keys AA8E81B4331F7F50; \
+    gpg --export AA8E81B4331F7F50 | apt-key add -; \
   fi; \
-	chmod +x /entrypoint*.sh /usr/local/bin/apt-install /usr/local/bin/apt-purge /usr/local/bin/docker-php-pecl-install && \
+	chmod +x /entrypoint*.sh /usr/local/bin/apt-clean /usr/local/bin/apt-install /usr/local/bin/apt-purge /usr/local/bin/docker-php-pecl-install && \
 	apt-get update -y && \
 	apt-install \
 		gettext-base \

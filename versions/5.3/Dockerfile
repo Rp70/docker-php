@@ -1,5 +1,5 @@
 FROM rp70/php-fpm-5.3
-LABEL maintainer="Rp70"
+LABEL maintainer="https://github.com/Rp70/docker-php"
 LABEL original-maintainer="helder"
 
 
@@ -33,6 +33,7 @@ RUN set -ex && \
   sed -i -e '/^open_basedir/ s/^/;/' /usr/local/etc/php/conf.d/zza_customs.ini && \
   docker-php-pecl-install imagick-3.3.0 && \
   docker-php-pecl-install memcache-2.2.0 && \
+  docker-php-pecl-install memcache-2.2.7 && \
   docker-php-pecl-install ZendOpcache
 
 

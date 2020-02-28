@@ -1,5 +1,5 @@
 FROM php:7.4-fpm
-LABEL maintainer="Rp70"
+LABEL maintainer="https://github.com/Rp70/docker-php"
 LABEL original-maintainer="helder"
 
 
@@ -33,6 +33,7 @@ RUN set -ex && \
   sed -i -e '/^open_basedir/ s/^/;/' /usr/local/etc/php/conf.d/zza_customs.ini && \
   docker-php-pecl-install imagick && \
   docker-php-pecl-install memcached-3.1.5 && \
+  docker-php-pecl-install memcache-4.0.5.2 && \
   docker-php-ext-install opcache
 
 

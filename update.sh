@@ -1,6 +1,21 @@
 #!/usr/bin/env bash
 set -e
 
+# Memcache
+# Compatible chart: https://github.com/websupport-sk/pecl-memcache
+# Versions: https://pecl.php.net/package/memcache
+declare -A MemcacheVersions=(
+  [5.3]=2.2.7
+  [5.4]=2.2.7
+  [5.5]=2.2.7
+  [5.6]=2.2.7
+  [7.0]=4.0.5.2
+  [7.1]=4.0.5.2
+  [7.2]=4.0.5.2
+  [7.3]=4.0.5.2
+  [7.4]=4.0.5.2
+)
+
 # Memcached
 # Compatible chart: https://github.com/php-memcached-dev/php-memcached
 # Versions: https://pecl.php.net/package/memcached
@@ -61,7 +76,14 @@ for version in "${versions[@]}"; do
     # Replace Memcached version
     replaceVersion="${MemcachedVersions[$version]}"
     if [ -n "$replaceVersion" ]; then
-      sed -i -e "s/docker-php-pecl-install memcached/docker-php-pecl-install memcached-$replaceVersion/g" \
+      sed -i -e "s/docker-php-pecl-install memcached /docker-php-pecl-install memcached-$replaceVersion /g" \
+        versions/$version/Dockerfile
+    fi
+
+    # Replace Memcache version
+    replaceVersion="${MemcacheVersions[$version]}"
+    if [ -n "$replaceVersion" ]; then
+      sed -i -e "s/docker-php-pecl-install memcache /docker-php-pecl-install memcache-$replaceVersion /g" \
         versions/$version/Dockerfile
     fi
 

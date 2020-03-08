@@ -176,6 +176,7 @@ DOCKER: `STARTUP_DEBUG=[yes|no; default=no]` to enforce entrypoint script to pri
 #### README.md
 - [ ] Usage instructions.
 - [ ] List of supported extensions.
+- [ ] ENV variables to enable extensions on demand.
 
 #### Dockerfile
 - [x] Remove nginx from image.

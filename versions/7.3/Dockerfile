@@ -29,7 +29,7 @@ RUN set -ex && \
 		procps \
     imagemagick libmagickwand-dev \
     libmemcached-dev && \
-  # Disable 'open_basedir' directive so PECL and other PHP commands work properly.
+  # Disable 'open_basedir' directive so PECL and other PHP commands can work properly.
   sed -i -e '/^open_basedir/ s/^/;/' /usr/local/etc/php/conf.d/zza_customs.ini && \
   docker-php-pecl-install imagick && \
   docker-php-pecl-install memcached-3.1.5 && \

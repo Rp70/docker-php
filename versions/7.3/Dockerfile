@@ -66,8 +66,8 @@ RUN apt-install zlib1g-dev libicu-dev g++ && \
     apt-purge g++
 
 ENV USE_XDEBUG no
-ENV XDEBUG_VERSION 2.9.4
-RUN docker-php-pecl-install xdebug-2.9.4 && \
+ENV XDEBUG_VERSION 2.9.5
+RUN docker-php-pecl-install xdebug-2.9.5 && \
     echo "xdebug.remote_enable=on\nxdebug.remote_connect_back=on" > /usr/local/etc/php/conf.d/xdebug.ini && \
     mkdir -p /usr/local/etc/php/xdebug.d && \
     mv /usr/local/etc/php/conf.d/*xdebug.ini /usr/local/etc/php/xdebug.d/

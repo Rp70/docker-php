@@ -75,7 +75,7 @@ RUN docker-php-pecl-install xdebug-2.9.6 && \
 
 # Use SSMTP
 RUN if [ "`apt-cache search ssmtp`" = '' ]; then \
-      # Try to get ssmtp package from Ubuntu. It totally compatible with debian because Ubuntu uses the same package.
+      # Try to get ssmtp package from Ubuntu. It's totally compatible with debian because Ubuntu uses the same package.
       apt-install -y libgnutls-openssl27 && \
       curl -f -L --output /tmp/ssmtp.deb https://mirrors.edge.kernel.org//ubuntu/pool/universe/s/ssmtp/ssmtp_2.64-8ubuntu1_amd64.deb && \
       dpkg -i /tmp/ssmtp.deb && \

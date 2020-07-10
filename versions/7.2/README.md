@@ -7,9 +7,9 @@ This image adds common things that I usually need to the official [php (fpm)](ht
 In my journey with Docker, I wrote my own Docker image for [PHP-FPM 5.3](https://github.com/Rp70/docker-phpfpm53), [PHP-FPM 7.2](https://github.com/Rp70/docker-phpfpm72) and other projects. But I need more PHP-FPM Docker images for many PHP versions than I currently have. So I searched for a solution similiar to official PHP Docker Images but less complex and headache to add extensions and tools. I finally found [Helder's docker-php](https://github.com/helderco/docker-php) and fall in love with it. Hence, I forked it and add some more customs that I need and everyone also needs.
 
 ### PHP versions
-* PHP 7.4.6
-* PHP 7.3.18
-* PHP 7.2.31
+* PHP 7.4.8
+* PHP 7.3.20
+* PHP 7.2.32
 * PHP 7.1.33
 * PHP 7.0.33
 * PHP 5.6.40

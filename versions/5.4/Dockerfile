@@ -89,6 +89,7 @@ RUN if [ "`apt-cache search ssmtp`" = '' ]; then \
     chown :ssmtp /usr/sbin/ssmtp && \
     chmod g+s /usr/sbin/ssmtp && \
     echo "sendmail_path = /usr/sbin/ssmtp -t" > /usr/local/etc/php/conf.d/sendmail.ini && \
+    usermod -aG mail www-data && \
     mv /etc/ssmtp/ssmtp.conf /etc/ssmtp/ssmtp.conf~
 
 

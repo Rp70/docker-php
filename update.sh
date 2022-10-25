@@ -14,6 +14,8 @@ declare -A MemcacheVersions=(
   [7.2]=4.0.5.2
   [7.3]=4.0.5.2
   [7.4]=4.0.5.2
+  [8.0]=8.0
+  [8.1]=8.0
 )
 
 # Memcached
@@ -29,6 +31,8 @@ declare -A MemcachedVersions=(
   [7.2]=3.1.5
   [7.3]=3.1.5
   [7.4]=3.1.5
+  [8.0]=3.2.0
+  [8.1]=3.2.0
 )
 
 # Xdebug
@@ -44,6 +48,8 @@ declare -A XdebugVersions=(
   [7.2]=2.9.6
   [7.3]=2.9.6
   [7.4]=2.9.6
+  [8.0]=3.1.5
+  [8.1]=3.1.5
 )
 
 cd versions
@@ -120,7 +126,7 @@ for version in "${versions[@]}"; do
       sed -i -e 's/docker-php-ext-install opcache/docker-php-pecl-install ZendOpcache/g' versions/$version/Dockerfile
     fi
 
-    if [[ $version == 7.* ]]; then
+    if (( $(bc -l <<< "$version > 7.1") )); then
       #sed -i -e '/uploadprogress/ s/^#*/#/' versions/$version/Dockerfile
       
       # mcrypt was DEPRECATED in PHP 7.1.0, and REMOVED in PHP 7.2.0

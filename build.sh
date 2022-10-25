@@ -14,11 +14,11 @@ cd ..
 BUILD_PARAMS="$BUILD_PARAMS --pull"
 tag=`date +%F`
 for version in "${versions[@]}"; do
-    time docker build $BUILD_PARAMS --tag phpfpm-$version:$tag versions/$version | tee tmp/build-$version.log
+    time docker build $BUILD_PARAMS --tag php-fpm-$version:$tag versions/$version | tee tmp/build-$version.log
     if [ $? -gt 0 ]; then
         echo "\nERROR: failed to build versions/$version!\n"
         exit $?
     fi
 
-    time docker tag phpfpm-$version:$tag phpfpm-$version:latest
+    time docker tag php-fpm-$version:$tag rp70/php-fpm:$version
 done

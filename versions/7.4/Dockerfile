@@ -58,7 +58,7 @@ RUN apt-install \
   && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
   && docker-php-ext-install gd
 
-RUN docker-php-pecl-install uploadprogress
+RUN docker-php-pecl-install uploadprogress-2.0.2
 
 RUN apt-install zlib1g-dev libicu-dev g++ && \
     docker-php-ext-configure intl && \

@@ -35,6 +35,23 @@ declare -A MemcachedVersions=(
   [8.1]=3.2.0
 )
 
+# uploadprogress
+# Compatible chart: https://pecl.php.net/package-changelog.php?package=uploadprogress
+# Versions: https://pecl.php.net/package/uploadprogress
+declare -A UploadProgressVersions=(
+  [5.3]=1.1.4
+  [5.4]=1.1.4
+  [5.5]=1.1.4
+  [5.6]=1.1.4
+  [7.0]=1.1.4
+  [7.1]=1.1.4
+  [7.2]=2.0.2
+  [7.3]=2.0.2
+  [7.4]=2.0.2
+  [8.0]=2.0.2
+  [8.1]=2.0.2
+)
+
 # Xdebug
 # Compatible chart: https://xdebug.org/docs/compat
 # Versions: https://pecl.php.net/package/xdebug
@@ -77,6 +94,13 @@ for version in "${versions[@]}"; do
         versions/$version/Dockerfile
     else
       sed -i -e "s/\(ENV XDEBUG_VERSION\) .*//g" versions/$version/Dockerfile
+    fi
+
+    # Replace uploadprogress version
+    replaceVersion="${UploadProgressVersions[$version]}"
+    if [ -n "$replaceVersion" ]; then
+      sed -i -e "s/docker-php-pecl-install uploadprogress/docker-php-pecl-install uploadprogress-$replaceVersion/g" \
+        versions/$version/Dockerfile
     fi
 
     # Replace Memcached version

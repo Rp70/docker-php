@@ -65,7 +65,7 @@ for version in "${versions[@]}"; do
     (
       rm -rf versions/$version
       mkdir -p versions/$version
-      cp -r README.md template/* versions/$version/
+      cp -ar README.md template/* versions/$version/
       sed -i -e 's/{{ version }}/'$version'/g' versions/$version/Dockerfile
     )
 

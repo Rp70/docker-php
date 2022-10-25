@@ -69,6 +69,26 @@ declare -A XdebugVersions=(
   [8.1]=3.1.5
 )
 
+# Composer
+# Compatible chart: https://getcomposer.org/doc/00-intro.md#system-requirements
+## Composer in its latest version requires PHP 7.2.5 to run.
+## A long-term-support version (2.2.x) still offers support for PHP 5.3.2+
+## in case you are stuck with a legacy PHP version.
+# Versions: https://getcomposer.org/download/
+declare -A ComposerVersions=(
+  [5.3]=2.2.18
+  [5.4]=2.2.18
+  [5.5]=2.2.18
+  [5.6]=2.2.18
+  [7.0]=2.2.18
+  [7.1]=2.2.18
+  [7.2]=2.4.3
+  [7.3]=2.4.3
+  [7.4]=2.4.3
+  [8.0]=2.4.3
+  [8.1]=2.4.3
+)
+
 cd versions
 versions=( "$@" )
 if [ ${#versions[@]} -eq 0 ]; then
@@ -114,6 +134,13 @@ for version in "${versions[@]}"; do
     replaceVersion="${MemcacheVersions[$version]}"
     if [ -n "$replaceVersion" ]; then
       sed -i -e "s/docker-php-pecl-install memcache /docker-php-pecl-install memcache-$replaceVersion /g" \
+        versions/$version/Dockerfile
+    fi
+
+    # Replace Composer version
+    replaceVersion="${ComposerVersions[$version]}"
+    if [ -n "$replaceVersion" ]; then
+      sed -i -e "s/ENV COMPOSER_VERSION 2.2.18/ENV COMPOSER_VERSION $replaceVersion/g" \
         versions/$version/Dockerfile
     fi
 

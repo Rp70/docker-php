@@ -103,7 +103,7 @@ RUN set -x \
 RUN apt-install git rsync unzip zlib1g-dev libzip-dev && \
     docker-php-ext-install zip
 
-ENV COMPOSER_VERSION 1.9.3
+ENV COMPOSER_VERSION 2.4.3
 ENV COMPOSER_HOME /var/www/.composer
 ENV PATH vendor/bin:$COMPOSER_HOME/vendor/bin:$PATH
 

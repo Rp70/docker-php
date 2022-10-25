@@ -41,6 +41,7 @@ RUN set -ex && \
 RUN apt-install \
       libfreetype6-dev \
       libjpeg62-turbo-dev \
+      libmcrypt-dev \
       libpng-dev \
       imagemagick \
       ghostscript \
@@ -52,6 +53,7 @@ RUN apt-install \
       # Reference: https://www.php.net/manual/en/migration74.other-changes.php
       libonig-dev \
   && docker-php-ext-install \
+      mcrypt \
       mysqli \
       pdo_mysql \
       mbstring \

@@ -121,6 +121,15 @@ RUN mkdir -p $COMPOSER_HOME/cache && \
 VOLUME $COMPOSER_HOME/cache
 
 
+RUN apt-install \
+      libxslt1-dev \
+  && docker-php-ext-install \
+      bcmath \
+      sockets \
+      soap \
+      xsl
+
+
 # Add configs
 COPY etc/*.ini /usr/local/etc/php/
 RUN cd /usr/local/etc/php && cp prod.ini conf.d/environment.ini

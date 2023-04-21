@@ -32,8 +32,8 @@ RUN set -ex && \
   # Disable 'open_basedir' directive so PECL and other PHP commands can work properly.
   sed -i -e '/^open_basedir/ s/^/;/' /usr/local/etc/php/conf.d/zza_customs.ini && \
   docker-php-pecl-install imagick && \
-  docker-php-pecl-install memcached && \
-  docker-php-pecl-install memcache && \
+  docker-php-pecl-install memcached-3.2.0 && \
+  docker-php-pecl-install memcache-8.0 && \
   docker-php-ext-install opcache
 
 
@@ -58,7 +58,7 @@ RUN apt-install \
   && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
   && docker-php-ext-install gd
 
-RUN docker-php-pecl-install uploadprogress
+RUN docker-php-pecl-install uploadprogress-2.0.2
 
 RUN apt-install zlib1g-dev libicu-dev g++ && \
     docker-php-ext-configure intl && \
@@ -66,8 +66,8 @@ RUN apt-install zlib1g-dev libicu-dev g++ && \
     apt-purge g++
 
 ENV USE_XDEBUG no
-
-RUN docker-php-pecl-install xdebug && \
+ENV XDEBUG_VERSION 3.2.1
+RUN docker-php-pecl-install xdebug-3.2.1 && \
     echo "xdebug.remote_enable=on\nxdebug.remote_connect_back=on" > /usr/local/etc/php/conf.d/xdebug.ini && \
     mkdir -p /usr/local/etc/php/xdebug.d && \
     mv /usr/local/etc/php/conf.d/*xdebug.ini /usr/local/etc/php/xdebug.d/
@@ -103,7 +103,7 @@ RUN set -x \
 RUN apt-install git rsync unzip zlib1g-dev libzip-dev && \
     docker-php-ext-install zip
 
-ENV COMPOSER_VERSION 2.2.18
+ENV COMPOSER_VERSION 2.5.5
 ENV COMPOSER_HOME /var/www/.composer
 ENV PATH vendor/bin:$COMPOSER_HOME/vendor/bin:$PATH
 

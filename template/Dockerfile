@@ -36,8 +36,8 @@ RUN set -ex && \
   # Disable 'open_basedir' directive so PECL and other PHP commands can work properly.
   sed -i -e '/^open_basedir/ s/^/;/' /usr/local/etc/php/conf.d/zza_customs.ini && \
   docker-php-pecl-install imagick && \
-  docker-php-pecl-install memcached && \
-  docker-php-pecl-install memcache && \
+  # docker-php-pecl-install memcached && \
+  # docker-php-pecl-install memcache && \
   docker-php-ext-install opcache
 
 
@@ -160,6 +160,9 @@ RUN set -ex && \
 RUN set -ex && \
   find /usr/local/etc/php -type f -print0 | xargs -0 chmod 0644 && \
   find /usr/local/etc/php -type d -print0 | xargs -0 chmod 0755
+
+RUN set -ex && \
+  chmod 0755 /usr/local/bin/composer
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 #CMD ["php-fpm"]

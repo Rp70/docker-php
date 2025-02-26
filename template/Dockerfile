@@ -133,6 +133,10 @@ RUN apt-install libxslt1-dev && \
         xsl \
         pcntl
 
+RUN set -ex && \
+  docker-php-pecl-install \
+    redis
+      
 
 # Add configs
 COPY etc/*.ini /usr/local/etc/php/

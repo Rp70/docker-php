@@ -9,7 +9,11 @@ RUN mkdir -p /usr/local/etc/php/disabled
 # Set noninteractive mode for apt-get
 ENV DEBIAN_FRONTEND noninteractive
 
-COPY files/ /
+COPY files/docker-entrypoint-init.d/ /docker-entrypoint-init.d/
+COPY files/etc/supervisor /etc/
+COPY files/usr/local/bin/ /usr/local/bin/
+COPY files/usr/local/etc/ /usr/local/etc/
+COPY files/entrypoint.sh /entrypoint.sh
 
 ENV PHP_MINOR_VERSION 5.6
 RUN set -ex && \
@@ -32,8 +36,8 @@ RUN set -ex && \
   # Disable 'open_basedir' directive so PECL and other PHP commands can work properly.
   sed -i -e '/^open_basedir/ s/^/;/' /usr/local/etc/php/conf.d/zza_customs.ini && \
   docker-php-pecl-install imagick && \
-  docker-php-pecl-install memcached-2.2.0 && \
-  docker-php-pecl-install memcache-2.2.7 && \
+  # docker-php-pecl-install memcached-2.2.0 && \
+  # docker-php-pecl-install memcache-2.2.7 && \
   docker-php-ext-install opcache
 
 
@@ -121,13 +125,13 @@ RUN mkdir -p $COMPOSER_HOME/cache && \
 VOLUME $COMPOSER_HOME/cache
 
 
-RUN apt-install \
-      libxslt1-dev \
-  && docker-php-ext-install \
-      bcmath \
-      sockets \
-      soap \
-      xsl
+RUN apt-install libxslt1-dev && \
+    docker-php-ext-install \
+        bcmath \
+        sockets \
+        soap \
+        xsl \
+        pcntl
 
 
 # Add configs
@@ -140,7 +144,8 @@ RUN sed -i -e '/^access.log/ s/^/;/' /usr/local/etc/php-fpm.d/docker.conf && \
     sed -i -e '/^;open_basedir/ s/^;//' /usr/local/etc/php/conf.d/zza_customs.ini
 
 # Add entrypoint
-COPY init.d /docker-entrypoint-init.d/
+COPY init.d/ /docker-entrypoint-init.d/
+
 COPY docker-entrypoint.sh /
 
 RUN set -ex && \
@@ -148,6 +153,9 @@ RUN set -ex && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
+RUN set -ex && \
+  find /usr/local/etc/php -type f -print0 | xargs -0 chmod 0644 && \
+  find /usr/local/etc/php -type d -print0 | xargs -0 chmod 0755
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 #CMD ["php-fpm"]

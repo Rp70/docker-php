@@ -125,13 +125,13 @@ RUN mkdir -p $COMPOSER_HOME/cache && \
 VOLUME $COMPOSER_HOME/cache
 
 
-RUN apt-install \
-      libxslt1-dev \
-  && docker-php-ext-install \
-      bcmath \
-      sockets \
-      soap \
-      xsl
+RUN apt-install libxslt1-dev && \
+    docker-php-ext-install \
+        bcmath \
+        sockets \
+        soap \
+        xsl \
+        pcntl
 
 
 # Add configs
@@ -145,6 +145,7 @@ RUN sed -i -e '/^access.log/ s/^/;/' /usr/local/etc/php-fpm.d/docker.conf && \
 
 # Add entrypoint
 COPY init.d/ /docker-entrypoint-init.d/
+
 COPY docker-entrypoint.sh /
 
 RUN set -ex && \

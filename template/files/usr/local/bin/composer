@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-php -c /usr/local/etc/php/conf.d -c /usr/local/etc/php/composer.ini -d open_basedir="/usr/local/bin" /usr/local/bin/composer.phar $@
+php -c /usr/local/etc/php/conf.d -c /usr/local/etc/php/composer.ini -d open_basedir="/usr/local/bin:/var/www:/tmp:." /usr/local/bin/composer.phar $@

@@ -9,7 +9,11 @@ RUN mkdir -p /usr/local/etc/php/disabled
 # Set noninteractive mode for apt-get
 ENV DEBIAN_FRONTEND noninteractive
 
-COPY files/ /
+COPY files/docker-entrypoint-init.d/ /docker-entrypoint-init.d/
+COPY files/etc/supervisor /etc/
+COPY files/usr/local/bin/ /usr/local/bin/
+COPY files/usr/local/etc/ /usr/local/etc/
+COPY files/entrypoint.sh /entrypoint.sh
 
 ENV PHP_MINOR_VERSION {{ version }}
 RUN set -ex && \
@@ -140,7 +144,7 @@ RUN sed -i -e '/^access.log/ s/^/;/' /usr/local/etc/php-fpm.d/docker.conf && \
     sed -i -e '/^;open_basedir/ s/^;//' /usr/local/etc/php/conf.d/zza_customs.ini
 
 # Add entrypoint
-COPY init.d /docker-entrypoint-init.d/
+COPY init.d/ /docker-entrypoint-init.d/
 COPY docker-entrypoint.sh /
 
 RUN set -ex && \
@@ -148,6 +152,9 @@ RUN set -ex && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
+RUN set -ex && \
+  find /usr/local/etc/php -type f -print0 | xargs -0 chmod 0644 && \
+  find /usr/local/etc/php -type d -print0 | xargs -0 chmod 0755
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 #CMD ["php-fpm"]

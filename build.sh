@@ -10,6 +10,7 @@ if [ ${#versions[@]} -eq 0 ]; then
 fi
 versions=( "${versions[@]%/}" )
 cd ..
+mkdir -p tmp
 
 BUILD_PARAMS="$BUILD_PARAMS --pull"
 tag=`date +%F`

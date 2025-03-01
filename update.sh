@@ -17,6 +17,7 @@ declare -A MemcacheVersions=(
   [8.0]=8.0
   [8.1]=8.0
   [8.2]=8.0
+  [8.3]=8.2
 )
 
 # Memcached
@@ -35,6 +36,7 @@ declare -A MemcachedVersions=(
   [8.0]=3.2.0
   [8.1]=3.2.0
   [8.2]=3.2.0
+  [8.3]=3.3.0
 )
 
 # uploadprogress
@@ -53,6 +55,7 @@ declare -A UploadProgressVersions=(
   [8.0]=2.0.2
   [8.1]=2.0.2
   [8.2]=2.0.2
+  [8.3]=2.0.2
 )
 
 # Xdebug
@@ -71,6 +74,7 @@ declare -A XdebugVersions=(
   [8.0]=3.2.1
   [8.1]=3.2.1
   [8.2]=3.2.1
+  [8.3]=3.4.1
 )
 
 # Composer
@@ -92,6 +96,7 @@ declare -A ComposerVersions=(
   [8.0]=2.5.5
   [8.1]=2.5.5
   [8.2]=2.5.5
+  [8.3]=2.8.6
 )
 
 cd versions

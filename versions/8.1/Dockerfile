@@ -131,6 +131,10 @@ RUN apt-install libxslt1-dev && \
         xsl \
         pcntl
 
+RUN set -ex && \
+  docker-php-pecl-install \
+    redis
+      
 
 # Add configs
 COPY etc/*.ini /usr/local/etc/php/
@@ -154,6 +158,9 @@ RUN set -ex && \
 RUN set -ex && \
   find /usr/local/etc/php -type f -print0 | xargs -0 chmod 0644 && \
   find /usr/local/etc/php -type d -print0 | xargs -0 chmod 0755
+
+RUN set -ex && \
+  chmod 0755 /usr/local/bin/composer
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 #CMD ["php-fpm"]
